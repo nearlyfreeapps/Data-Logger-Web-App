@@ -2,14 +2,14 @@
         padding-top: 40px !important; 
 }
 .tabbar .ui-btn .ui-icon { 
-        width: 30px !important; 
-        height: 30px !important; 
-        margin-left: -15px !important; 
-        box-shadow: none !important; 
-        -moz-box-shadow: none !important; 
-        -webkit-box-shadow: none !important; 
-        -webkit-border-radius: none !important; 
-        border-radius: none !important; 
+    width: 30px !important; 
+    height: 30px !important; 
+    margin-left: -15px !important; 
+    box-shadow: none !important; 
+    -moz-box-shadow: none !important; 
+    -webkit-box-shadow: none !important; 
+    -webkit-border-radius: none !important; 
+    border-radius: none !important; 
 }
 
 #data-icon .ui-icon {
@@ -21,3 +21,9 @@
     background: url('../images/icons/notepad.png') 50% 50% no-repeat;
     background-size: 22px 28px;
 }
+
+#export-icon .ui-icon {
+    background: url('../images/icons/export.png') 50% 50% no-repeat;
+    background-size: 18px 18px;
+}
+

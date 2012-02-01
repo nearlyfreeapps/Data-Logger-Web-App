@@ -9,8 +9,11 @@
 
     <script src="assets/js/libs/underscore-min.js"></script>
     <script src="assets/js/libs/backbone-min.js"></script>
+
 	<script src="assets/js/libs/jquery-1.7.1.min.js"></script>
+    <script src="src/application.js"></script>
 	<script src="assets/js/libs/jquery.mobile-1.0.1.min.js"></script>
+
 </head> 
 <body> 
 
@@ -18,7 +21,7 @@
 <div id="template" data-role="page">
 	<div data-role="header">
 		<h1>Data Logger</h1>
-        <a href="#" data-icon="add" class="ui-btn-right">Add Template</a>
+        <a href="#add-template" data-icon="add" class="ui-btn-right">Add Template</a>
 	</div>
     
     <div data-role="content">
@@ -32,16 +35,43 @@
         <div class="tabbar" data-role="navbar">
             <ul>
                 <li><a href="#data" id="data-icon" data-icon="custom" data-transition="none">Data</a></li>
-                <li><a href="#template" id="templates-icon" data-icon="custom" data-transition="none" class="ui-btn-active">Templates</a></li>
+                <li><a href="#" id="templates-icon" data-icon="custom" data-transition="none" class="ui-btn-active ui-state-persist">Templates</a></li>
             </ul>
         </div>
     </div>
 </div>
 
+<!-- Add Template Screen -->
+<div id="add-template" data-role="page">
+	<div data-role="header">
+        <a href="#template" data-direction="reverse" data-icon="back">Back</a>
+		<h1>Data Logger</h1>
+	</div>
+    
+    <div data-role="content">
+        <ul data-role="listview">
+            <li><a href="#">Accelerometer</a></li>
+            <li><a href="#">GPS</a></li>
+            <li><a href="#">Camera</a></li>
+        </ul>
+    </div>
+
+    <div class="tabbar" data-role="footer" data-position="fixed">
+        <div class="tabbar" data-role="navbar">
+            <ul>
+                <li><a href="#data" id="data-icon" data-icon="custom" data-transition="none">Data</a></li>
+                <li><a href="#" id="templates-icon" data-icon="custom" data-transition="none" class="ui-btn-active ui-state-persist">Templates</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
 <!-- Data Screen -->
 <div id="data" data-role="page">
 	<div data-role="header">
 		<h1>Data Logger</h1>
+        <a href="#" data-icon="custom" id="export-icon" class="ui-btn-right">Export</a>
 	</div>
     
     <div data-role="content">
@@ -55,12 +85,14 @@
     <div class="tabbar" data-role="footer" data-position="fixed">
         <div class="tabbar" data-role="navbar">
             <ul>
-                <li><a href="#data" id="data-icon" data-icon="custom" data-transition="none" class="ui-btn-active">Data</a></li>
+                <li><a href="#" id="data-icon" data-icon="custom" data-transition="none" class="ui-btn-active ui-state-persist">Data</a></li>
                 <li><a href="#template" id="templates-icon" data-icon="custom" data-transition="none">Templates</a></li>
             </ul>
         </div>
     </div>
 </div>
+
+
 
 </body>
 </html>
