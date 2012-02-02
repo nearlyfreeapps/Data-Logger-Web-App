@@ -11,5 +11,4 @@
   <access subdomains="true" uri="*"/>
   <icon src="assets/images/icon.png"/>
   <content src="index.html"/>
-
 </widget>

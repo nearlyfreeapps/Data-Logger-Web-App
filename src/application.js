@@ -1,4 +1,14 @@
-$(document).bind("mobileinit", function() {
-    $.mobile.hashListeningEnabled = false;
+(function() {
+
+    var DataLogger = this.DataLogger = {};
+
+    DataLogger.init = function() {
+        //Initialize app
+    }
+
+})(this);
+
+$(function(){
+    DataLogger.init();
 });
 
