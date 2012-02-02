@@ -27,3 +27,7 @@
     background-size: 18px 18px;
 }
 
+.tall-list .ui-btn-inner {
+    min-height: 60px;
+}
+
