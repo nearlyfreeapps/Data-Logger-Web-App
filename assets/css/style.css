@@ -1,5 +1,5 @@
 .tabbar .ui-btn .ui-btn-inner { 
-        padding-top: 40px !important; 
+    padding-top: 40px !important; 
 }
 .tabbar .ui-btn .ui-icon { 
     width: 30px !important; 
@@ -12,14 +12,14 @@
     border-radius: none !important; 
 }
 
-#data-icon .ui-icon {
-    background: url('../images/icons/chart.png') 50% 50% no-repeat;
-    background-size: 30px 24px;
+#logs-icon .ui-icon {
+    background: url('../images/icons/179-notepad.png') 50% 50% no-repeat;
+    background-size: 22px 28px;
 }
 
-#templates-icon .ui-icon {
-    background: url('../images/icons/notepad.png') 50% 50% no-repeat;
-    background-size: 22px 28px;
+#settings-icon .ui-icon {
+    background: url('../images/icons/106-sliders.png') 50% 50% no-repeat;
+    background-size: 24px 24px;
 }
 
 #export-icon .ui-icon {
@@ -31,3 +31,9 @@
     min-height: 60px;
 }
 
+#sensor-title {
+    font-weight: bold;
+    padding-left: 15px;
+    padding-top: 15px;
+    text-shadow: 0px 2px 0px #ffffff;
+}

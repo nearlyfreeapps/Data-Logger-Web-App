@@ -17,15 +17,15 @@
 </head> 
 <body> 
 
-<!-- Template Screen -->
-<div id="template" data-role="page">
+<!-- Settings Screen -->
+<div id="settings" data-role="page">
 	<div data-role="header">
-		<h1>Data Logger</h1>
+		<h1>Log Templates</h1>
         <a href="#add-template" data-icon="add" class="ui-btn-right">Add Template</a>
 	</div>
     
     <div data-role="content">
-        <ul data-role="listview" class="ui-listview-inset">
+        <ul data-role="listview">
             <li class="tall-list"><a href="#">Template 1</a></li>
             <li class="tall-list"><a href="#">Template 2</a></li>
         </ul>
@@ -34,8 +34,8 @@
     <div class="tabbar" data-role="footer" data-position="fixed">
         <div class="tabbar" data-role="navbar">
             <ul>
-                <li><a href="#data" id="data-icon" data-icon="custom" data-transition="none">Data</a></li>
-                <li><a href="#" id="templates-icon" data-icon="custom" data-transition="none" class="ui-btn-active ui-state-persist">Templates</a></li>
+                <li><a href="#" id="settings-icon" data-icon="custom" data-transition="none" class="ui-btn-active ui-state-persist">Settings</a></li>
+                <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
             </ul>
         </div>
     </div>
@@ -44,13 +44,13 @@
 <!-- Add Template Screen -->
 <div id="add-template" data-role="page">
 	<div data-role="header">
-        <a href="#template" data-direction="reverse" data-icon="back">Back</a>
-		<h1>Data Logger</h1>
-        <a href="#" data-icon="check">Save</a>
+        <a href="#settings" data-direction="reverse" data-icon="back">Log Templates</a>
+		<h1>Settings</h1>
 	</div>
     
     <div data-role="content">
-        <ul data-role="listview" class="ui-listview-inset">
+        <div id="sensor-title">Sensors</div>
+        <ul data-role="listview" data-inset="true">
             <li class="tall-list"><a href="#">Accelerometer</a></li>
             <li class="tall-list"><a href="#">GPS</a></li>
             <li class="tall-list"><a href="#">Camera</a></li>
@@ -60,8 +60,8 @@
     <div class="tabbar" data-role="footer" data-position="fixed">
         <div class="tabbar" data-role="navbar">
             <ul>
-                <li><a href="#data" id="data-icon" data-icon="custom" data-transition="none">Data</a></li>
-                <li><a href="#" id="templates-icon" data-icon="custom" data-transition="none" class="ui-btn-active ui-state-persist">Templates</a></li>
+                <li><a href="#" id="settings-icon" data-icon="custom" data-transition="none" class="ui-btn-active ui-state-persist">Settings</a></li>
+                <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
             </ul>
         </div>
     </div>
@@ -69,14 +69,14 @@
 
 
 <!-- Data Screen -->
-<div id="data" data-role="page">
+<div id="logs" data-role="page">
 	<div data-role="header">
-		<h1>Data Logger</h1>
+		<h1>Data Logs</h1>
         <a href="#" data-icon="custom" id="export-icon" class="ui-btn-right">Export</a>
 	</div>
     
     <div data-role="content">
-        <ul data-role="listview" class="ui-listview-inset">
+        <ul data-role="listview">
             <li class="tall-list"><a href="#">Data Session 1</a></li>
             <li class="tall-list"><a href="#">Data Session 2</a></li>
             <li class="tall-list"><a href="#">Data Session 3</a></li>
@@ -86,14 +86,12 @@
     <div class="tabbar" data-role="footer" data-position="fixed">
         <div class="tabbar" data-role="navbar">
             <ul>
-                <li><a href="#" id="data-icon" data-icon="custom" data-transition="none" class="ui-btn-active ui-state-persist">Data</a></li>
-                <li><a href="#template" id="templates-icon" data-icon="custom" data-transition="none">Templates</a></li>
+                <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
+                <li><a href="#" id="logs-icon" data-icon="custom" data-transition="none" class="ui-btn-active ui-state-persist">Logs</a></li>
             </ul>
         </div>
     </div>
 </div>
-
-
 
 </body>
 </html>
