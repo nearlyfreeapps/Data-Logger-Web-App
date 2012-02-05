@@ -6,15 +6,17 @@
 
 	<link rel="stylesheet" href="assets/css/jquery.mobile-1.0.1.min.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
+	
+    <script src="assets/js/libs/jquery-1.7.1.min.js"></script>
+    <script src="assets/js/libs/json2.js"></script>
 
     <script src="assets/js/libs/underscore-min.js"></script>
     <script src="assets/js/libs/backbone-min.js"></script>
+    <script src="assets/js/libs/backbone.localStorage-min.js"></script>
 
-	<script src="assets/js/libs/jquery-1.7.1.min.js"></script>
     <script src="src/application.js"></script>
 	<script src="assets/js/libs/jquery.mobile-1.0.1.min.js"></script>
-
-</head> 
+    </head> 
 <body> 
 
 <!-- Settings Screen -->
@@ -25,16 +27,16 @@
 	</div>
     
     <div data-role="content">
-        <ul data-role="listview">
-            <li class="tall-list"><a href="#">Template 1</a></li>
-            <li class="tall-list"><a href="#">Template 2</a></li>
+        <ul id="template-list" data-role="listview">
+            <li id="template-item" class="tall-list"><a href="#">Template 1</a></li>
+            <li id="template-item" class="tall-list"><a href="#">Template 2</a></li>
         </ul>
     </div>
 
     <div class="tabbar" data-role="footer" data-position="fixed">
         <div class="tabbar" data-role="navbar">
             <ul>
-                <li><a href="#" id="settings-icon" data-icon="custom" data-transition="none" class="ui-btn-active ui-state-persist">Settings</a></li>
+                <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
                 <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
             </ul>
         </div>
@@ -60,7 +62,7 @@
     <div class="tabbar" data-role="footer" data-position="fixed">
         <div class="tabbar" data-role="navbar">
             <ul>
-                <li><a href="#" id="settings-icon" data-icon="custom" data-transition="none" class="ui-btn-active ui-state-persist">Settings</a></li>
+                <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
                 <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
             </ul>
         </div>
@@ -87,7 +89,7 @@
         <div class="tabbar" data-role="navbar">
             <ul>
                 <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
-                <li><a href="#" id="logs-icon" data-icon="custom" data-transition="none" class="ui-btn-active ui-state-persist">Logs</a></li>
+                <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
             </ul>
         </div>
     </div>
