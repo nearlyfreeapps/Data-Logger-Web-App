@@ -1,6 +1,43 @@
-var datalogger = {
+var datalogger = function() {
+    
+    var TemplateModel = Backbone.Model.extend({
+        defaults: {
+            name: 'Template Name',
+        }
+    });
 
-    Router: Backbone.Router.extend({
+    var TemplateCollection = Backbone.Collection.extend({
+        model: TemplateModel,
+        localStorage: new Store('Templates')
+    });
+
+    var TemplateListView = Backbone.View.extend({
+        el: $('#template-list'),
+        initialize: function() {
+            this.model.bind('reset', this.render, this);
+        },
+        render: function(eventName) {
+            _.each(this.model.models, function(template) {
+                $(this.el).append(
+                    new TemplateItemView({model: template}).render().el);
+            }, this);
+            
+            $(this.el).listview('refresh');
+            return this;
+        }
+    });
+
+    var TemplateItemView = Backbone.View.extend({
+        tagName: 'li',
+        className: 'tall-list',
+        template: _.template($('#template-list-item').html()),
+        render: function(eventName) {
+            $(this.el).html(this.template(this.model.toJSON()));
+            return this;
+        }
+    });
+
+    var Router = Backbone.Router.extend({
         routes: {
             '': 'index',
             'settings': 'settings',
@@ -8,39 +45,37 @@ var datalogger = {
             'add-template': 'add_template'
         },
 
-        index: function () {},
+        index: function() {},
 
         settings: function() {
-            $.mobile.changePage($('#settings'), { transition: "none" });
+            $.mobile.changePage($('#settings'), { transition: 'none', reverse: false, changeHash: false });
             $('.ui-btn-active').removeClass('ui-btn-active');
         },  
 
         logs: function() {
-            $.mobile.changePage($('#logs'), { transition: "none" });
+            $.mobile.changePage($('#logs'), { transition: 'none', reverse: false, changeHash: false });
             $('.ui-btn-active').removeClass('ui-btn-active');
         },
 
         add_template: function() {
-            $.mobile.changePage($('#add-template'), { transition: "slide" });
+            $.mobile.changePage($('#add-template'), { transition: 'slide', reverse: false, changeHash: false });
             $('.ui-btn-active').removeClass('ui-btn-active');
         }
-    }),
+    });
 
-    init: function() {
-        var router = new datalogger.Router();
-        Backbone.history.start();
-    }
+
+    /* App initialization */
+    var router = new Router();
+    Backbone.history.start();
+
+    var templates = new TemplateCollection();
+    var templateListView = new TemplateListView({ model: templates });
+    templates.fetch();
 
 };
 
 
 $(function() {
-    datalogger.init();
-});
-
-$(document).bind('mobileinit', function(){      
-    $.mobile.ajaxEnabled = false;
-    $.mobile.linkBindingEnabled = false;
-    $.mobile.hashListeningEnabled = false;
+    datalogger();
 });
 

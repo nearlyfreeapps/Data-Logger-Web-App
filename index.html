@@ -14,8 +14,17 @@
     <script src="assets/js/libs/backbone-min.js"></script>
     <script src="assets/js/libs/backbone.localStorage-min.js"></script>
 
-    <script src="src/application.js"></script>
+    <script>
+        $(document).bind('mobileinit', function(){      
+            $.mobile.ajaxEnabled = false;
+            $.mobile.linkBindingEnabled = false;
+            $.mobile.hashListeningEnabled = false;
+            $.mobile.pushStateEnabled = false;
+        });
+    </script>
 	<script src="assets/js/libs/jquery.mobile-1.0.1.min.js"></script>
+    <script src="src/application.js"></script>
+
     </head> 
 <body> 
 
@@ -28,8 +37,9 @@
     
     <div data-role="content">
         <ul id="template-list" data-role="listview">
-            <li id="template-item" class="tall-list"><a href="#">Template 1</a></li>
-            <li id="template-item" class="tall-list"><a href="#">Template 2</a></li>
+            <script type="text/template" id="template-list-item">
+                <a href="#template/<%= id %>"><%= name %></a>
+            </script>
         </ul>
     </div>
 
