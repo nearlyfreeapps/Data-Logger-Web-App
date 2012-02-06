@@ -37,6 +37,24 @@ var datalogger = function() {
         }
     });
 
+    var AddTemplateView = Backbone.View.extend({
+        el: $('#add-template'),
+        events: {
+            'click #save-template': 'save_template',
+            'click #add-template-back': 'back'
+        },
+        save_template: function() {
+            alert('Attempting to save template');
+        },
+        back: function() {
+            $.mobile.changePage($('#settings'), { transition: 'slide', reverse: true, changeHash: false });
+            $('.ui-btn-active').removeClass('ui-btn-active');
+        },
+        render: function(eventName) {
+            return this;
+        }
+    });
+
     var Router = Backbone.Router.extend({
         routes: {
             '': 'index',
@@ -70,6 +88,7 @@ var datalogger = function() {
 
     var templates = new TemplateCollection();
     var templateListView = new TemplateListView({ model: templates });
+    var addTemplateView = new AddTemplateView();
     templates.fetch();
 
 };
