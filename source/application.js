@@ -113,7 +113,7 @@ var datalogger = function() {
 
     var options = {
         series: { shadowSize: 0 },
-        yaxis: { min: -5, max: 5 },
+        yaxis: { min: -3, max: 3 },
         xaxis: { min: 0, max: 100, show: false }
     };
     
