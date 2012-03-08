@@ -1,10 +1,11 @@
 .tabbar .ui-btn .ui-btn-inner { 
-    padding-top: 40px !important; 
+    padding-top: 15px !important;
 }
 .tabbar .ui-btn .ui-icon { 
     width: 30px !important; 
-    height: 30px !important; 
-    margin-left: -15px !important; 
+    height: 30px !important;
+    margin-left: 30px !important;
+    margin-top: -5px !important;
     box-shadow: none !important; 
     -moz-box-shadow: none !important; 
     -webkit-box-shadow: none !important; 
@@ -14,12 +15,12 @@
 
 #logs-icon .ui-icon {
     background: url('../images/icons/179-notepad.png') 50% 50% no-repeat;
-    background-size: 22px 28px;
+    background-size: 18px 22px;
 }
 
 #settings-icon .ui-icon {
     background: url('../images/icons/106-sliders.png') 50% 50% no-repeat;
-    background-size: 24px 24px;
+    background-size: 18px 18px;
 }
 
 #export-icon .ui-icon {

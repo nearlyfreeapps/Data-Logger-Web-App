@@ -4,7 +4,7 @@
 	<title>Data Logger</title> 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<link rel="stylesheet" href="assets/css/jquery.mobile-1.0.1.min.css" />
+	<link rel="stylesheet" href="assets/css/jquery.mobile-1.1.0.min.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
 	
     <script src="assets/js/libs/jquery-1.7.1.min.js"></script>
@@ -22,17 +22,19 @@
             $.mobile.pushStateEnabled = false;
         });
     </script>
-	<script src="assets/js/libs/jquery.mobile-1.0.1.min.js"></script>
-    <script src="src/application.js"></script>
+	<script src="assets/js/libs/jquery.mobile-1.1.0.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+    <script src="assets/js/libs/jquery.flot.js"></script>
+    <script src="source/application.js"></script>
 
     </head> 
 <body> 
 
 <!-- Settings Screen -->
 <div id="settings" data-role="page">
-	<div data-role="header">
+	<div data-role="header" data-position="fixed">
 		<h1>Log Templates</h1>
-        <a href="#add-template" data-icon="add" class="ui-btn-right">Add Template</a>
+        <a href="#add-template" data-icon="add" class="ui-btn-right">Add</a>
 	</div>
     
     <div data-role="content">
@@ -55,18 +57,91 @@
 
 <!-- Add Template Screen -->
 <div id="add-template" data-role="page">
-	<div data-role="header">
-        <a href="#" id="add-template-back" data-icon="back">Log Templates</a>
+	<div data-role="header" data-position="fixed">
+        <a href="#" id="add-template-back" data-icon="back">Back</a>
 		<h1>Settings</h1>
-        <a href="#" id="save-template" data-icon="check">Save</a>
+        <a href="#" id="save-template" data-icon="check" data-theme="b">Save</a>
 	</div>
     
     <div data-role="content">
+        <ul data-role="listview" data-inset="true">
+            <li class="tall-list">
+                <div data-role="fieldcontain">
+                    <input type="text" name="name" id="name" value="" placeholder="Template name" />
+                </div>
+            </li>
+        </ul>
+        <div id="sensor-title">Scheduling</div>
+        <ul data-role="listview" data-inset="true">
+            <li class="tall-list">
+                <a href="#"><div id="scheduling">
+                    Starts<br><br>
+                    Ends<br><br>
+                    Repeats<br><br>
+                </div>
+                </a>
+            </li>
+        </ul>
+
         <div id="sensor-title">Sensors</div>
         <ul data-role="listview" data-inset="true">
-            <li class="tall-list"><a href="#">Accelerometer</a></li>
-            <li class="tall-list"><a href="#">GPS</a></li>
-            <li class="tall-list"><a href="#">Camera</a></li>
+            <li class="tall-list">
+            <a href="#accelerometer-template">Accelerometer
+                <div style="float:right;margin-right: 25px;">
+                <select name="slider" id="accelerometer-switch" data-role="slider" data-mini="true">
+                    <option value="off">Off</option>
+                    <option value="on">On</option>
+                </select>
+                </div>
+            </a></li>
+            <li class="tall-list"><a href="#">GPS
+                <div style="float:right;margin-right: 25px;">
+                <select name="slider" id="gps-switch" data-role="slider" data-mini="true">
+                    <option value="off">Off</option>
+                    <option value="on">On</option>
+                </select>
+                </div>
+            </a></li>
+            <li class="tall-list"><a href="#">Camera
+                <div style="float:right;margin-right: 25px;">
+                <select name="slider" id="camera-switch" data-role="slider" data-mini="true">
+                    <option value="off">Off</option>
+                    <option value="on">On</option>
+                </select>
+                </div>
+            </a></li>
+        </ul>
+    </div>
+
+    <div class="tabbar" data-role="footer" data-position="fixed">
+        <div class="tabbar" data-role="navbar">
+            <ul>
+                <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
+                <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Accelerometer View -->
+<div id="accelerometer-template" data-role="page">
+	<div data-role="header" data-position="fixed">
+        <a href="#" id="accelerometer-template-back" data-icon="back">Settings</a>
+		<h1>Accelerometer</h1>
+	</div>
+    
+    <div data-role="content">
+        <div id="sensor-title">Log Settings</div>
+        <ul data-role="listview" data-inset="true">
+            <li class="tall-list">Frequency</li>
+            <li class="tall-list"><input type="range" name="slider" id="slider-fill" value="40" min="40" max="1000" data-highlight="true" /></li>
+        </ul>
+
+        <div id="sensor-title">Live View</div>
+        <ul data-role="listview" data-inset="true">
+            <li class="tall-list">
+                <div id="accelerometer-graph" style="width: 300px; height: 150px;"></div>
+            </li>
         </ul>
     </div>
 
@@ -83,16 +158,13 @@
 
 <!-- Data Screen -->
 <div id="logs" data-role="page">
-	<div data-role="header">
-		<h1>Data Logs</h1>
+	<div data-role="header" data-position="fixed">
+		<h1>Logs</h1>
         <a href="#" data-icon="custom" id="export-icon" class="ui-btn-right">Export</a>
 	</div>
     
     <div data-role="content">
-        <ul data-role="listview">
-            <li class="tall-list"><a href="#">Data Session 1</a></li>
-            <li class="tall-list"><a href="#">Data Session 2</a></li>
-            <li class="tall-list"><a href="#">Data Session 3</a></li>
+        <ul data-role="listview" data-inset="true">
         </ul>
     </div>
 
