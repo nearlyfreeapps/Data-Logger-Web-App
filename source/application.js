@@ -152,7 +152,7 @@ var datalogger = function() {
         },
         onAccelSuccess: function(acceleration) {
             accelPoints.addXYZ(acceleration.x, acceleration.y, acceleration.z);
-            accelerometerPlot.setData([ {data: accelPoints.toArrayX(), color: 'blue' }, {data: accelPoints.toArrayY(), color: 'red'}, {data: accelPoints.toArrayZ(), color: 'green'} ]);
+            accelerometerPlot.setData([ {data: accelPoints.toArrayX(), color: 'red' }, {data: accelPoints.toArrayY(), color: 'blue'}, {data: accelPoints.toArrayZ(), color: 'green'} ]);
             accelerometerPlot.draw();
         },
         onAccelError: function() {
