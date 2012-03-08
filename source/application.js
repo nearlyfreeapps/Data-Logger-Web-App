@@ -29,7 +29,7 @@ var datalogger = function() {
                 point.set({ x: [x[0] + 1, x[1]], y: [y[0] + 1, y[1]], z: [z[0] + 1, z[1]] });
             });
 
-            this.add({x: [0, accelx], y: [0, accely], z: [0, accelz] });
+            this.add({x: [0, accelx / 800.0], y: [0, accely / 800.0], z: [0, accelz / 800.0] });
         },
         toArrayX: function() {
             var points = [];
