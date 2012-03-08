@@ -8,33 +8,55 @@ var datalogger = function() {
     
     var AccelPointModel = Backbone.Model.extend({
         defaults: {
-            x: 0,
-            y: 0
+            x: [0,0],
+            y: [0,0],
+            z: [0,0]
         },
     });
 
     var AccelPointCollection = Backbone.Collection.extend({
         model: AccelPointModel,
-        addX: function(x) {
-            console.log('Adding Point ' + (this.length + 1) + ' , ' + x);
-
+        addXYZ: function(accelx, accely, accelz) {
+ 
             if (this.length == 100) {
                 this.remove(this.at(0));
             }
 
             this.each(function(point) {
-                point.set({ x: point.get('x') + 1 });
+                var x = point.get('x');
+                var y = point.get('y');
+                var z = point.get('z');
+                point.set({ x: [x[0] + 1, x[1]], y: [y[0] + 1, y[1]], z: [z[0] + 1, z[1]] });
             });
 
-            this.add({x: 0, y: x});
+            this.add({x: [0, accelx], y: [0, accely], z: [0, accelz] });
         },
-        toArray: function() {
+        toArrayX: function() {
             var points = [];
 
             this.each(function(point) {
-                points.push([point.get('x'), point.get('y')]);
+                points.push(point.get('x'));
             });
+
             return points;
+        },
+        toArrayY: function() {
+            var points = [];
+
+            this.each(function(point) {
+                points.push(point.get('y'));
+            });
+
+            return points;
+        },
+        toArrayZ: function() {
+            var points = [];
+
+            this.each(function(point) {
+                points.push(point.get('z'));
+            });
+
+            return points
         }
     });
 
@@ -90,7 +112,8 @@ var datalogger = function() {
     });
 
     var options = {
-        series: { color: 'blue', shadowSize: 0 },
+        series: { shadowSize: 0 },
+        colors: [ 'blue', 'red', 'green' ],
         yaxis: { min: -5, max: 5 },
         xaxis: { min: 0, max: 100, show: false }
     };
@@ -117,9 +140,9 @@ var datalogger = function() {
                 this.watchID = null;
             }
 
-            accelerometerPlot.setData([]);
+            accelerometerPlot.setData([ [] ]);
             accelerometerPlot.draw();
-            accelPoints.refresh([]);
+            accelPoints.reset();
         },
         render: function(eventName) {
             return this;
@@ -129,8 +152,8 @@ var datalogger = function() {
             this.watchID = navigator.accelerometer.watchAcceleration(this.onAccelSuccess, this.onAccelError, options);
         },
         onAccelSuccess: function(acceleration) {
-            accelPoints.addX(acceleration.x);
-            accelerometerPlot.setData([ accelPoints.toArray() ]);
+            accelPoints.addXYZ(acceleration.x, acceleration.y, acceleration.z);
+            accelerometerPlot.setData([ accelPoints.toArrayX(), accelPoints.toArrayY(), accelPoints.toArrayZ() ]);
             accelerometerPlot.draw();
         },
         onAccelError: function() {
