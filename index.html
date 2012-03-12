@@ -71,16 +71,31 @@
                 </div>
             </li>
         </ul>
-        <div id="sensor-title">Scheduling</div>
         <ul data-role="listview" data-inset="true">
             <li class="tall-list">
-                <a href="#"><div id="scheduling">
+            <div data-role="fieldcontain">
+                Schedule
+             <div style="float:right;margin-right: 25px;margin-top: -10px;">
+                <select name="slider" id="schedule-switch" data-role="slider" data-mini="true">
+                    <option value="off">Off</option>
+                    <option value="on">On</option>
+                </select>
+                </div>
+            </div>
+            </li>
+            <!--<li class="tall-list">
+                <a href="#"><div style="float:left;" id="scheduling">
                     Starts<br><br>
                     Ends<br><br>
                     Repeats<br><br>
                 </div>
+                <div style="float: right;text-align: right;margin-right: 25px;">
+                    Sun, 11 Mar 16:20<br><br>
+                    17:20<br><br>
+                    None<br><br>
+                </div>
                 </a>
-            </li>
+            </li>--!>
         </ul>
 
         <div id="sensor-title">Sensors</div>
@@ -140,7 +155,9 @@
         <div id="sensor-title">Live View</div>
         <ul data-role="listview" data-inset="true">
             <li class="tall-list">
-                <div id="accelerometer-graph" style="width: 300px; height: 150px;"></div>
+                <div data-role="fieldcontain">
+                    <div id="accelerometer-graph" style="width: 300px; height: 150px;"></div>
+                </div>
             </li>
         </ul>
     </div>
