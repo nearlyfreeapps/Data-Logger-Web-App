@@ -1,9 +1,32 @@
 var datalogger = function() {
     
+    var ScheduleModel = Backbone.Model.extend({
+        defaults: {
+            start: '',
+            end: '',
+            repeat: ''
+        }
+    });
+
+    var SensorModel = Backbone.Model.extend({
+        defaults: {
+            name: '',
+            on: false
+        }
+    });
+
+    var SensorCollection = Backbone.Collection.extend({
+        model: SensorModel
+    });
+
     var TemplateModel = Backbone.Model.extend({
         defaults: {
-            name: 'Template Name',
-        }
+            name: '',
+        }//,
+        /*initialize : function() {
+            this.sensors = new SensorCollection;
+            this.schedule = new ScheduleModel;
+        }*/
     });
     
     var AccelPointModel = Backbone.Model.extend({
@@ -65,10 +88,13 @@ var datalogger = function() {
         localStorage: new Store('Templates')
     });
 
+    var templates = new TemplateCollection();
+
     var TemplateListView = Backbone.View.extend({
         el: $('#template-list'),
         initialize: function() {
             this.model.bind('reset', this.render, this);
+            this.model.bind('add', this.add, this);
         },
         render: function(eventName) {
             _.each(this.model.models, function(template) {
@@ -76,6 +102,11 @@ var datalogger = function() {
                     new TemplateItemView({model: template}).render().el);
             }, this);
             
+            $(this.el).listview('refresh');
+            return this;
+        },
+        add: function(model) {
+            $(this.el).append(new TemplateItemView({ model: model }).render().el);
             $(this.el).listview('refresh');
             return this;
         }
@@ -107,8 +138,14 @@ var datalogger = function() {
             alert('Start the logging session...');
         },
         save_template: function(event) {
-            $('#save-template').hide();
-            $('#start-template').show();
+            if($('#template-name').val() == '') {
+                alert('Enter a template name before saving');
+            } else {                
+                templates.add({ name: $('#template-name').val()});
+
+                $('#save-template').hide();
+                $('#start-template').show();
+            }
         },
         back: function(event) {
             event.preventDefault();
@@ -229,7 +266,6 @@ var datalogger = function() {
 
     
 
-    var templates = new TemplateCollection();
     var templateListView = new TemplateListView({ model: templates });
     var addTemplateView = new AddTemplateView();
     var accelerometerView = new AccelerometerView();
@@ -263,6 +299,12 @@ var datalogger = function() {
         add_template: function() {
             $.mobile.changePage($('#add-template'), { transition: 'none', reverse: false, changeHash: false });
             $('.ui-btn-active').removeClass('ui-btn-active');
+            $('#template-name').val('');
+            $('#schedule-switch').val('Off');
+            $('#schedule-block').hide();
+            $('#accelerometer-switch').val('Off');
+            $('#gps-switch').val('Off');
+            $('#camera-switch').val('Off');
         },
         accelerometer_template: function() {
             $.mobile.changePage($('#accelerometer-template'), { transition: 'none', reverse: false, changeHash: false })
