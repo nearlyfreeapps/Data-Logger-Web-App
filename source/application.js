@@ -89,7 +89,7 @@ var datalogger = function() {
 
     var TemplateCollection = Backbone.Collection.extend({
         model: TemplateModel,
-        localStorage: new Backbone.LocalStorage("Templates")
+        localStorage: new Store("Templates")
     });
 
     var templates = new TemplateCollection();
