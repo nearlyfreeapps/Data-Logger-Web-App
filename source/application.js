@@ -313,7 +313,6 @@ var datalogger = function() {
         accelerometer_template: function() {
             $.mobile.changePage($('#accelerometer-template'), { transition: 'none', reverse: false, changeHash: false })
             $('.ui-btn-active').removeClass('ui-btn-active');
-            alert(device.platform);
             accelerometerView.plot();
         },
         schedule_template: function() {
