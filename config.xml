@@ -2,6 +2,7 @@
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap = "http://phonegap.com/ns/1.0" version="1.0.0.0" versionCode="10">
   <name>Smart Phone Data Logger</name>
   <author href="http://cmer.uoguelph.ca/">CIS 3760 Software Engineering</author>
+  <preference name="orientation" value="portrait" />
   <access subdomains="true" uri="*"/>
   <icon src="assets/images/icon.png"/>
   <content src="index.html"/>

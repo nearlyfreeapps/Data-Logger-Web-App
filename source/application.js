@@ -55,7 +55,7 @@ var datalogger = function() {
             if(device.platform == "BlackBerry") {
                 this.add({x: [0, accelx / 800.0], y: [0, accely / 800.0], z: [0, accelz / 800.0] });
             } else {
-                this.add({x: [0, accelx], y: [0, accely], z: [0, accelz] });
+                this.add({x: [0, accelx / 25.0], y: [0, accely / 25.0], z: [0, accelz / 25.0] });
             }
         },
         toArrayX: function() {
