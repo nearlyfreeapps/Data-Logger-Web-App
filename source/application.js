@@ -28,7 +28,7 @@ var datalogger = function() {
                 var z = point.get('z');
                 point.set({ x: [x[0] + 1, x[1]], y: [y[0] + 1, y[1]], z: [z[0] + 1, z[1]] });
             });
-
+            
             this.add({x: [0, accelx / 800.0], y: [0, accely / 800.0], z: [0, accelz / 800.0] });
         },
         toArrayX: function() {
@@ -95,16 +95,49 @@ var datalogger = function() {
         el: $('#add-template'),
         events: {
             'click #save-template': 'save_template',
-            'click #add-template-back': 'back'
+            'click #add-template-back': 'back',
+            'click #start-template': 'start_template',
+            'change #schedule-switch': 'schedule_switch',
+            'change #accelerometer-switch': 'accelerometer_switch',
+            'change #gps-switch': 'gps_switch',
+            'change #camera-switch': 'camera_switch',
+            'change #template-name': 'template_name'
+        },
+        start_template: function(event) {
+            alert('Start the logging session...');
         },
         save_template: function(event) {
-            event.preventDefault();
-            alert('Attempting to save template');
+            $('#save-template').hide();
+            $('#start-template').show();
         },
         back: function(event) {
             event.preventDefault();
-            $.mobile.changePage($('#settings'), { transition: 'slide', reverse: true, changeHash: true });
+            $.mobile.changePage($('#settings'), { transition: 'none', reverse: true, changeHash: true });
             $('.ui-btn-active').removeClass('ui-btn-active');
+        },
+        schedule_switch: function(event) {
+            if($('#schedule-switch').val() == 'on') {
+                $('#start-template').hide();
+                $('#save-template').show();
+                $('#schedule-block').show();
+            } else {
+                $('#save-template').hide();
+                $('#schedule-block').hide();
+                $('#start-template').show();
+            }
+        },
+        accelerometer_switch: function(event) {
+            alert($('#accelerometer-switch').val());
+        },
+        gps_switch: function(event) {
+            alert($('#gps-switch').val());
+        },
+        camera_switch: function(event) {
+            alert($('#camera-switch').val());
+        },
+        template_name: function(event) {
+            $('#start-template').hide();
+            $('#save-template').show();
         },
         render: function(eventName) {
             return this;
@@ -127,11 +160,12 @@ var datalogger = function() {
             this.render();
         },
         events: {
-            'click #accelerometer-template-back': 'back'
+            'click #accelerometer-template-back': 'back',
+            'change #accelerometer-frequency': 'frequency_change'
         },
         back: function(event) {
             event.preventDefault();
-            $.mobile.changePage($('#add-template'), { transition: 'slide', reverse: true, changeHash: true });
+            $.mobile.changePage($('#add-template'), { transition: 'none', reverse: true, changeHash: true });
             $('.ui-btn-active').removeClass('ui-btn-active');
             
             if(this.watchID) {
@@ -143,11 +177,20 @@ var datalogger = function() {
             accelerometerPlot.draw();
             accelPoints.reset();
         },
+        frequency_change: function(event) {
+            if(this.watchID) {
+                navigator.accelerometer.clearWatch(this.watchID);
+                this.watchID = null;
+            }
+
+            this.plot();
+        },
         render: function(eventName) {
             return this;
         },
         plot: function() {
-            var options = { frequency: 100 };
+            var frequency = 1000 / $('#accelerometer-frequency').val();
+            var options = { frequency: frequency};
             this.watchID = navigator.accelerometer.watchAcceleration(this.onAccelSuccess, this.onAccelError, options);
         },
         onAccelSuccess: function(acceleration) {
@@ -160,10 +203,38 @@ var datalogger = function() {
         }
     });
 
+    var ScheduleView = Backbone.View.extend({
+        el: $('#schedule-template'),
+        events: {
+            'click #schedule-template-back': 'back',
+            'click #schedule-template-done': 'done'
+        },
+        back: function(event) {
+            $.mobile.changePage($('#add-template'), { transition: 'none', reverse: true, changeHash: true });
+        },
+        done: function(event) {
+            $.mobile.changePage($('#add-template'), { transition: 'none', reverse: true, changeHash: true });
+        },
+    });
+
+    var RepeatView = Backbone.View.extend({
+        el: $('#repeat-template'),
+        events: {
+            'click #repeat-template-back': 'back',
+        },
+        back: function(event) {
+            $.mobile.changePage($('#schedule-template'), { transition: 'none', reverse: true, changeHash: true });
+        },
+    });
+
+    
+
     var templates = new TemplateCollection();
     var templateListView = new TemplateListView({ model: templates });
     var addTemplateView = new AddTemplateView();
     var accelerometerView = new AccelerometerView();
+    var scheduleView = new ScheduleView();
+    var repeatView = new RepeatView();
     templates.fetch();
 
     var Router = Backbone.Router.extend({
@@ -172,7 +243,9 @@ var datalogger = function() {
             'settings': 'settings',
             'logs': 'logs',
             'add-template': 'add_template',
-            'accelerometer-template': 'accelerometer_template'
+            'accelerometer-template': 'accelerometer_template',
+            'schedule-template': 'schedule_template',
+            'repeat-template': 'repeat_template'
         },
 
         index: function() {},
@@ -188,14 +261,21 @@ var datalogger = function() {
         },
 
         add_template: function() {
-            $.mobile.changePage($('#add-template'), { transition: 'slide', reverse: false, changeHash: false });
+            $.mobile.changePage($('#add-template'), { transition: 'none', reverse: false, changeHash: false });
             $('.ui-btn-active').removeClass('ui-btn-active');
         },
         accelerometer_template: function() {
-            $.mobile.changePage($('#accelerometer-template'), { transition: 'slide', reverse: false, changeHash: false });
+            $.mobile.changePage($('#accelerometer-template'), { transition: 'none', reverse: false, changeHash: false })
             $('.ui-btn-active').removeClass('ui-btn-active');
-
             accelerometerView.plot();
+        },
+        schedule_template: function() {
+            $.mobile.changePage($('#schedule-template'), { transition: 'none', reverse: false, changeHash: false });
+            $('.ui-btn-active').removeClass('ui-btn-active');
+        },
+        repeat_template: function() {
+            $.mobile.changePage($('#repeat-template'), { transition: 'none', reverse: false, changeHash: false });
+            $('.ui-btn-active').removeClass('ui-btn-active');
         }
 
     });

@@ -60,14 +60,15 @@
 	<div data-role="header" data-position="fixed">
         <a href="#" id="add-template-back" data-icon="back">Back</a>
 		<h1>Settings</h1>
-        <a href="#" id="save-template" data-icon="check" data-theme="b">Save</a>
+        <a href="#" style="display: none;" id="save-template" data-icon="check" data-theme="b">Save</a>
+        <a href="#" id="start-template" data-theme="b">Start</a>
 	</div>
     
     <div data-role="content">
         <ul data-role="listview" data-inset="true">
             <li class="tall-list">
                 <div data-role="fieldcontain">
-                    <input type="text" name="name" id="name" value="" placeholder="Template name" />
+                    <input type="text" name="name" id="template-name" value="" placeholder="Template name" />
                 </div>
             </li>
         </ul>
@@ -83,8 +84,8 @@
                 </div>
             </div>
             </li>
-            <!--<li class="tall-list">
-                <a href="#"><div style="float:left;" id="scheduling">
+            <li id="schedule-block" class="tall-list" style="display: none;">
+                <a href="#schedule-template" id="scheduling"><div style="float:left;">
                     Starts<br><br>
                     Ends<br><br>
                     Repeats<br><br>
@@ -95,7 +96,7 @@
                     None<br><br>
                 </div>
                 </a>
-            </li>--!>
+            </li>
         </ul>
 
         <div id="sensor-title">Sensors</div>
@@ -149,7 +150,11 @@
         <div id="sensor-title">Log Settings</div>
         <ul data-role="listview" data-inset="true">
             <li class="tall-list">Frequency<div style="float:right;">Hz</a></li>
-            <li class="tall-list"><input type="range" name="slider" id="slider-fill" value="10" min="1" max="25" data-highlight="true" /></li>
+            <li class="tall-list">
+                <div data-role="fieldcontain">
+                    <input type="range" id="accelerometer-frequency" name="slider" id="slider-fill" value="10" min="1" max="25" data-highlight="true" />
+                </div>
+            </li>
         </ul>
 
         <div id="sensor-title">Live View</div>
@@ -159,6 +164,60 @@
                     <div id="accelerometer-graph" style="width: 300px; height: 150px;"></div>
                 </div>
             </li>
+        </ul>
+    </div>
+
+    <div class="tabbar" data-role="footer" data-position="fixed">
+        <div class="tabbar" data-role="navbar">
+            <ul>
+                <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
+                <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Schedule Screen -->
+<div id="schedule-template" data-role="page">
+	<div data-role="header" data-position="fixed">
+        <a href="#" id="schedule-template-back" data-icon="back">Back</a>
+		<h1>Start & End</h1>
+        <a href="#" id="schedule-template-done" data-icon="check" data-theme="b">Done</a>
+	</div>
+    
+    <div data-role="content">
+        <ul data-role="listview" data-inset="true">
+            <li class="tall-list">Start</li>
+            <li class="tall-list">End</li>
+            <li class="tall-list"><a href="#repeat-template" id="repeat">Repeat</a></li>
+        </ul>
+    </div>
+    <div class="tabbar" data-role="footer" data-position="fixed">
+        <div class="tabbar" data-role="navbar">
+            <ul>
+                <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
+                <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Repeat Screen -->
+<div id="repeat-template" data-role="page">
+	<div data-role="header" data-position="fixed">
+        <a href="#" id="repeat-template-back" data-icon="back">Back</a>
+		<h1>Repeat</h1>
+	</div>
+    
+    <div data-role="content">
+        <ul data-role="listview" data-inset="true">
+            <li class="tall-list">Monday</li>
+            <li class="tall-list">Tuesday</li>
+            <li class="tall-list">Wednesday</li>
+            <li class="tall-list">Thursday</li>
+            <li class="tall-list">Friday</li>
+            <li class="tall-list">Saturday</li>
+            <li class="tall-list">Sunday</li>
         </ul>
     </div>
 
