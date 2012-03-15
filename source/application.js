@@ -51,8 +51,12 @@ var datalogger = function() {
                 var z = point.get('z');
                 point.set({ x: [x[0] + 1, x[1]], y: [y[0] + 1, y[1]], z: [z[0] + 1, z[1]] });
             });
-            
-            this.add({x: [0, accelx / 800.0], y: [0, accely / 800.0], z: [0, accelz / 800.0] });
+
+            if(device.platform == "BlackBerry") {
+                this.add({x: [0, accelx / 800.0], y: [0, accely / 800.0], z: [0, accelz / 800.0] });
+            } else {
+                this.add({x: [0, accelx], y: [0, accely], z: [0, accelz] });
+            }
         },
         toArrayX: function() {
             var points = [];
@@ -85,7 +89,7 @@ var datalogger = function() {
 
     var TemplateCollection = Backbone.Collection.extend({
         model: TemplateModel,
-        localStorage: new Store('Templates')
+        localStorage: new Backbone.LocalStorage("Templates")
     });
 
     var templates = new TemplateCollection();
