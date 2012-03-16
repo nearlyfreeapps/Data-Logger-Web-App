@@ -171,7 +171,6 @@ var datalogger = function() {
                     template.set({schedule: {start: 'Start Day', end: 'End Day', repeat: 'Monday' } });
                 }
                  
-                console.log(template.get('schedule').get('start'));
                 template.save();
                 $('#save-template').hide();
                 $('#start-template').show();
