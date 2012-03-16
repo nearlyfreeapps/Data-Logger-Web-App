@@ -1,6 +1,6 @@
 var datalogger = function() {
     
-    var ScheduleModel = Backbone.Model.extend({
+    var ScheduleModel = Backbone.RelationalModel.extend({
         defaults: {
             start: '',
             end: '',
@@ -8,10 +8,11 @@ var datalogger = function() {
         }
     });
 
-    var SensorModel = Backbone.Model.extend({
+    var SensorModel = Backbone.RelationalModel.extend({
         defaults: {
             name: '',
-            on: false
+            on: false,
+            frequency: 0
         }
     });
 
@@ -19,14 +20,26 @@ var datalogger = function() {
         model: SensorModel
     });
 
-    var TemplateModel = Backbone.Model.extend({
+    var TemplateModel = Backbone.RelationalModel.extend({
         defaults: {
             name: '',
-        }//,
-        /*initialize : function() {
-            this.sensors = new SensorCollection;
-            this.schedule = new ScheduleModel;
-        }*/
+        },
+        relations: [
+            {
+                type: Backbone.HasOne,
+                key: 'schedule',
+                relatedModel: ScheduleModel,
+            },
+            {
+                type: Backbone.HasMany,
+                key: 'sensors',
+                relatedModel: SensorModel,
+                collectionType: SensorCollection,
+                reverseRelation: {
+                    key: 'template'
+                }
+            }
+        ]
     });
     
     var AccelPointModel = Backbone.Model.extend({
@@ -144,9 +157,22 @@ var datalogger = function() {
         save_template: function(event) {
             if($('#template-name').val() == '') {
                 alert('Enter a template name before saving');
-            } else {                
-                templates.add({ name: $('#template-name').val()});
+            } else {
+                var template = templates.create({
+                    name: $('#template-name').val()
+                });
 
+                template.get('sensors').add([
+                    { name: 'accelerometer', on: $('#accelerometer-switch').val(),
+                      frequency: $('#accelerometer-frequency').val() }
+                ]);
+                 
+                if($('#schedule-switch').val() == 'on') {
+                    template.set({schedule: {start: 'Start Day', end: 'End Day', repeat: 'Monday' } });
+                }
+                 
+                console.log(template.get('schedule').get('start'));
+                template.save();
                 $('#save-template').hide();
                 $('#start-template').show();
             }
@@ -304,11 +330,11 @@ var datalogger = function() {
             $.mobile.changePage($('#add-template'), { transition: 'none', reverse: false, changeHash: false });
             $('.ui-btn-active').removeClass('ui-btn-active');
             $('#template-name').val('');
-            $('#schedule-switch').val('Off');
+            $('#schedule-switch').val('Off').slider('refresh');
             $('#schedule-block').hide();
-            $('#accelerometer-switch').val('Off');
-            $('#gps-switch').val('Off');
-            $('#camera-switch').val('Off');
+            $('#accelerometer-switch').val('Off').slider('refresh');
+            $('#gps-switch').val('Off').slider('refresh');
+            $('#camera-switch').val('Off').slider('refresh');
         },
         accelerometer_template: function() {
             $.mobile.changePage($('#accelerometer-template'), { transition: 'none', reverse: false, changeHash: false })
