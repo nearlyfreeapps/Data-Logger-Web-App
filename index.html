@@ -48,7 +48,7 @@
         </ul>
     </div>
 
-    <div class="tabbar" data-role="footer" data-position="fixed">
+    <div class="tabbar" data-role="footer" data-id="bottom-footer" data-position="fixed">
         <div class="tabbar" data-role="navbar">
             <ul>
                 <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
@@ -60,7 +60,7 @@
 
 <!-- Add Template Screen -->
 <div id="add-template" data-role="page">
-	<div data-role="header" data-position="fixed">
+	<div data-role="header" data-position="fixed" data-tap-toggle="false">
         <a href="#" id="add-template-back" data-icon="back">Back</a>
 		<h1>Settings</h1>
         <a href="#" style="display: none;" id="save-template" data-icon="check" data-theme="b" class="ui-btn-right">Save</a>
@@ -94,9 +94,9 @@
                     Repeats<br><br>
                 </div>
                 <div style="float: right;text-align: right;margin-right: 25px;">
-                    Sun, 11 Mar 16:20<br><br>
-                    17:20<br><br>
-                    None<br><br>
+                    <div id="start-date-time">N/A</div><br>
+                    <div id="end-date-time">N/A</div><br>
+                    <div id="repeats">None</div><br>
                 </div>
                 </a>
             </li>
@@ -121,18 +121,10 @@
                 </select>
                 </div>
             </a></li>
-            <li class="tall-list"><a href="#">Camera
-                <div style="float:right;margin-right: 25px;">
-                <select name="slider" id="camera-switch" data-role="slider" data-mini="true">
-                    <option value="off">Off</option>
-                    <option value="on">On</option>
-                </select>
-                </div>
-            </a></li>
         </ul>
     </div>
 
-    <div class="tabbar" data-role="footer" data-position="fixed">
+    <div class="tabbar" data-id="bottom-footer" data-role="footer" data-tap-toggle="false" data-position="fixed">
         <div class="tabbar" data-role="navbar">
             <ul>
                 <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
@@ -144,7 +136,7 @@
 
 <!-- Accelerometer View -->
 <div id="accelerometer-template" data-role="page">
-	<div data-role="header" data-position="fixed">
+	<div data-role="header"  data-tap-toggle="false" data-position="fixed">
         <a href="#" id="accelerometer-template-back" data-icon="back">Back</a>
 		<h1>Accelerometer</h1>
 	</div>
@@ -170,7 +162,7 @@
         </ul>
     </div>
 
-    <div class="tabbar" data-role="footer" data-position="fixed">
+    <div class="tabbar" data-id="bottom-footer"  data-tap-toggle="false" data-role="footer" data-position="fixed">
         <div class="tabbar" data-role="navbar">
             <ul>
                 <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
@@ -182,7 +174,7 @@
 
 <!-- Schedule Screen -->
 <div id="schedule-template" data-role="page">
-	<div data-role="header" data-position="fixed">
+	<div data-role="header"  data-tap-toggle="false" data-position="fixed">
         <a href="#" id="schedule-template-back" data-icon="back">Back</a>
 		<h1>Start & End</h1>
         <a href="#" id="schedule-template-done" data-icon="check" data-theme="b">Done</a>
@@ -190,14 +182,26 @@
     
     <div data-role="content">
         <ul data-role="listview" data-inset="true">
-            <li class="tall-list">Start Date</li>
-            <li class="tall-list">Start Time</li>
-            <li class="tall-list">End Date</li>
-            <li class="tall-list">End Time</li>
+            <li class="tall-list">Start Date<br>
+                <input name="start-date" id="start-date" type="date" data-role="datebox"
+                   data-options='{"mode": "calbox"}'>
+            </li>
+            <li class="tall-list">Start Time<br>
+                <input name="start-time" id="start-time" type="date" data-role="datebox"
+                    data-options='{"mode": "timebox", "timeFormatOverride": 12}'>
+            </li>
+            <li class="tall-list">End Date<br>
+                <input name="end-date" id="end-date" type="date" data-role="datebox"
+                   data-options='{"mode": "calbox"}'>
+            </li>
+            <li class="tall-list">End Time<br>
+                <input name="end-time" id="end-time" type="date" data-role="datebox"
+                    data-options='{"mode": "timebox", "timeFormatOverride": 12}'>
+            </li>
             <li class="tall-list"><a href="#repeat-template" id="repeat">Repeat</a></li>
         </ul>
     </div>
-    <div class="tabbar" data-role="footer" data-position="fixed">
+    <div class="tabbar"  data-tap-toggle="false" data-id="bottom-footer" data-role="footer" data-position="fixed">
         <div class="tabbar" data-role="navbar">
             <ul>
                 <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
@@ -209,24 +213,24 @@
 
 <!-- Repeat Screen -->
 <div id="repeat-template" data-role="page">
-	<div data-role="header" data-position="fixed">
+	<div data-role="header"  data-tap-toggle="false" data-position="fixed">
         <a href="#" id="repeat-template-back" data-icon="back">Back</a>
 		<h1>Repeat</h1>
 	</div>
     
     <div data-role="content">
-        <ul data-role="listview" data-inset="true">
-            <li class="tall-list">Monday</li>
-            <li class="tall-list">Tuesday</li>
-            <li class="tall-list">Wednesday</li>
-            <li class="tall-list">Thursday</li>
-            <li class="tall-list">Friday</li>
-            <li class="tall-list">Saturday</li>
-            <li class="tall-list">Sunday</li>
+        <ul data-role="listview" id="repeat-list" data-inset="true">
+            <li class="tall-list" id="repeat-mon" data-icon="false"><a href="#">Monday<div id="mon-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
+            <li class="tall-list" id="repeat-tue" data-icon="false"><a href="#">Tuesday<div id="tue-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
+            <li class="tall-list" id="repeat-wed" data-icon="false"><a href="#">Wednesday<div id="wed-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
+            <li class="tall-list" id="repeat-thu" data-icon="false"><a href="#">Thursday<div id="thu-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
+            <li class="tall-list" id="repeat-fri" data-icon="false"><a href="#">Friday<div id="fri-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
+            <li class="tall-list" id="repeat-sat" data-icon="false"><a href="#">Saturday<div id="sat-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
+            <li class="tall-list" id="repeat-sun" data-icon="false"><a href="#">Sunday<div id="sun-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
         </ul>
     </div>
 
-    <div class="tabbar" data-role="footer" data-position="fixed">
+    <div class="tabbar"  data-tap-toggle="false" data-id="bottom-footer" data-role="footer" data-position="fixed">
         <div class="tabbar" data-role="navbar">
             <ul>
                 <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
@@ -239,7 +243,7 @@
 
 <!-- Data Screen -->
 <div id="logs" data-role="page">
-	<div data-role="header" data-position="fixed">
+	<div data-role="header"  data-tap-toggle="false" data-position="fixed">
 		<h1>Logs</h1>
         <a href="#" data-icon="custom" id="export-icon" class="ui-btn-right">Export</a>
 	</div>
@@ -249,7 +253,7 @@
         </ul>
     </div>
 
-    <div class="tabbar" data-role="footer" data-position="fixed">
+    <div class="tabbar"  data-tap-toggle="false" data-id="bottom-footer" data-role="footer" data-position="fixed">
         <div class="tabbar" data-role="navbar">
             <ul>
                 <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>

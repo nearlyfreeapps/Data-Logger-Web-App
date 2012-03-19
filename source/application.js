@@ -287,10 +287,39 @@ var datalogger = function() {
         el: $('#repeat-template'),
         events: {
             'click #repeat-template-back': 'back',
+            'click #repeat-mon': 'monday',
+            'click #repeat-tue': 'tuesday',
+            'click #repeat-wed': 'wednesday',
+            'click #repeat-thu': 'thursday',
+            'click #repeat-fri': 'friday',
+            'click #repeat-sat': 'saturday',
+            'click #repeat-sun': 'sunday'
         },
         back: function(event) {
             $.mobile.changePage($('#schedule-template'), { transition: 'none', reverse: true, changeHash: true });
         },
+        monday: function(event) {
+            $('#mon-check').toggle();
+        },
+        tuesday: function(event) {
+            $('#tue-check').toggle();
+        },
+        wednesday: function(event) {
+            $('#wed-check').toggle();
+        },
+        thursday: function(event) {
+            $('#thu-check').toggle();
+        },
+        friday: function(event) {
+            $('#fri-check').toggle();
+        },
+        saturday: function(event) {
+            $('#sat-check').toggle();
+        },
+        sunday: function(event) {
+            $('#sun-check').toggle();
+        }
+
     });
 
     
