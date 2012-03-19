@@ -299,24 +299,31 @@ var datalogger = function() {
             $.mobile.changePage($('#schedule-template'), { transition: 'none', reverse: true, changeHash: true });
         },
         monday: function(event) {
+            event.preventDefault();
             $('#mon-check').toggle();
         },
         tuesday: function(event) {
+            event.preventDefault();
             $('#tue-check').toggle();
         },
         wednesday: function(event) {
+            event.preventDefault();
             $('#wed-check').toggle();
         },
         thursday: function(event) {
+            event.preventDefault();
             $('#thu-check').toggle();
         },
         friday: function(event) {
+            event.preventDefault();
             $('#fri-check').toggle();
         },
         saturday: function(event) {
+            event.preventDefault();
             $('#sat-check').toggle();
         },
         sunday: function(event) {
+            event.preventDefault();
             $('#sun-check').toggle();
         }
 
