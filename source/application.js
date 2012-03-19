@@ -148,7 +148,6 @@ var datalogger = function() {
             'change #schedule-switch': 'schedule_switch',
             'change #accelerometer-switch': 'accelerometer_switch',
             'change #gps-switch': 'gps_switch',
-            'change #camera-switch': 'camera_switch',
             'change #template-name': 'template_name'
         },
         start_template: function(event) {
@@ -193,13 +192,10 @@ var datalogger = function() {
             }
         },
         accelerometer_switch: function(event) {
-            alert($('#accelerometer-switch').val());
+            //..
         },
         gps_switch: function(event) {
-            alert($('#gps-switch').val());
-        },
-        camera_switch: function(event) {
-            alert($('#camera-switch').val());
+            //..
         },
         template_name: function(event) {
             $('#start-template').hide();
