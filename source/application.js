@@ -151,7 +151,18 @@ var datalogger = function() {
             'change #schedule-switch': 'schedule_switch',
             'change #accelerometer-switch': 'accelerometer_switch',
             'change #gps-switch': 'gps_switch',
-            'change #template-name': 'template_name'
+            'change #template-name': 'template_name',
+            'click #delete': 'delete_template',
+            'click #delete-confirm': 'delete_confirm'
+        },
+        delete_template: function(event) {
+            event.preventDefault();
+            $('#delete-confirm-block').toggle();
+        },
+        delete_confirm: function(event) {
+            event.preventDefault();
+            this.model.destroy();
+            $.mobile.changePage($('#settings'), { transition: 'none', reverse: true, changeHash: false });
         },
         start_template: function(event) {
             alert('Start the logging session...');
@@ -186,10 +197,15 @@ var datalogger = function() {
                     var template = this.model;
 
                     template.set({name: $('#template-name').val()});
-
+                    template.get('sensors').at(0).set({ state: $('#accelerometer-switch').val(),
+                        frequency: $('#accelerometer-frequency').val() });
+                    template.get('sensors').at(1).set({ state: $('#gps-switch').val(),
+                        frequency: $('#gps-frequency').val() });
                     template.save();
                 }
-
+                
+                $('#delete-list').show();
+                $('#delete-confirm-block').hide();
                 $('#save-template').hide();
                 $('#start-template').show();
             }
@@ -211,10 +227,12 @@ var datalogger = function() {
             }
         },
         accelerometer_switch: function(event) {
-            //..
+            $('#start-template').hide();
+            $('#save-template').show();
         },
         gps_switch: function(event) {
-            //..
+            $('#start-template').hide();
+            $('#save-template').show();
         },
         template_name: function(event) {
             $('#start-template').hide();
@@ -371,6 +389,8 @@ var datalogger = function() {
                 $('#schedule-switch').val('off').slider('refresh');
                 $('#schedule-block').hide();
             }
+            $('#delete-list').show();
+            $('#delete-confirm-block').hide();
             $('#save-template').hide();
             $('#start-template').show();
         },
@@ -418,6 +438,7 @@ var datalogger = function() {
             $('#schedule-block').hide();
             $('#accelerometer-switch').val('Off').slider('refresh');
             $('#gps-switch').val('Off').slider('refresh');
+            $('#delete-list').hide();
         },
         accelerometer_template: function() {
             $.mobile.changePage($('#accelerometer-template'), { transition: 'none', reverse: false, changeHash: false })

@@ -122,16 +122,27 @@
                 </div>
             </a></li>
         </ul>
-    </div>
 
-    <div class="tabbar" data-id="bottom-footer" data-role="footer" data-tap-toggle="false" data-position="fixed">
+        <ul style="display:none;" id="delete-list" data-role="listview" data-inset="true">
+            <li>
+                 <button data-role="button" id="delete" data-icon="delete">Delete Template</button>
+            </li>
+            <li id="delete-confirm-block" style="display: none;">Press 'Confirm' to delete the template. This action is not reversible.<br>
+             <button data-role="button" id="delete-confirm" data-icon="check" data-theme="b">Confirm</button>
+            </li>
+        </ul>
+
+    </div>
+    
+
+    <!--<div class="tabbar" data-id="bottom-footer" data-role="footer" data-tap-toggle="false" data-position="fixed">
         <div class="tabbar" data-role="navbar">
             <ul>
                 <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
                 <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
             </ul>
         </div>
-    </div>
+    </div>--!>
 </div>
 
 <!-- Accelerometer View -->
@@ -162,14 +173,14 @@
         </ul>
     </div>
 
-    <div class="tabbar" data-id="bottom-footer"  data-tap-toggle="false" data-role="footer" data-position="fixed">
+    <!--<div class="tabbar" data-id="bottom-footer"  data-tap-toggle="false" data-role="footer" data-position="fixed">
         <div class="tabbar" data-role="navbar">
             <ul>
                 <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
                 <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
             </ul>
         </div>
-    </div>
+    </div>--!>
 </div>
 
 <!-- Schedule Screen -->
