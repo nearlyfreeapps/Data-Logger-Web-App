@@ -112,6 +112,8 @@ var datalogger = function() {
         initialize: function() {
             this.model.bind('reset', this.render, this);
             this.model.bind('add', this.add, this);
+            this.model.bind('change', this.change, this);
+            this.model.bind('remove', this.remove, this);
         },
         render: function(eventName) {
             _.each(this.model.models, function(template) {
@@ -122,45 +124,26 @@ var datalogger = function() {
             $(this.el).listview('refresh');
             return this;
         },
+        change: function(eventName) {
+            $(this.el).empty();
+            this.render();
+        },
         add: function(model) {
             $(this.el).append(new TemplateItemView({ model: model }).render().el);
             $(this.el).listview('refresh');
             return this;
-        }
-    });
-
-    var TemplateItemView = Backbone.View.extend({
-        tagName: 'li',
-        className: 'tall-list',
-        events: {
-            'click a': 'template_click'
         },
-        template: _.template($('#template-list-item').html()),
-        template_click: function(event) {
-            event.preventDefault();
-            $.mobile.changePage($('#add-template'), { transition: 'none', reverse: false, changeHash: false });
-            $('#template-name').val(this.model.get('name'));
-            $('#accelerometer-switch').val(this.model.get('sensors').at(0).get('state')).slider('refresh');
-            $('#gps-switch').val(this.model.get('sensors').at(1).get('state')).slider('refresh');
-            if(this.model.has('schedule')) {
-                //.. show schedule
-                $('#schedule-switch').val('on').slider('refresh');
-                $('#schedule-block').show();
-            } else {
-                $('#schedule-switch').val('off').slider('refresh');
-                $('#schedule-block').hide();
-            }
-            $('#save-template').hide();
-            $('#start-template').show();
-        },
-        render: function(eventName) {
-            $(this.el).html(this.template(this.model.toJSON()));
-            return this;
+        remove: function(model) {
+            $(this.el).empty();
+            this.render();
         }
     });
 
     var AddTemplateView = Backbone.View.extend({
         el: $('#add-template'),
+        initialize: function() {
+            this.model = null;
+        },
         events: {
             'click #save-template': 'save_template',
             'click #add-template-back': 'back',
@@ -177,32 +160,43 @@ var datalogger = function() {
             if($('#template-name').val() == '') {
                 alert('Enter a template name before saving');
             } else {
-                var template = templates.create({
-                    name: $('#template-name').val()
-                });
+                if(this.model == null) {
+                    var template = templates.create({
+                        name: $('#template-name').val()
+                    });
 
-                template.get('sensors').add([
-                    { name: 'accelerometer', state: $('#accelerometer-switch').val(),
-                      frequency: $('#accelerometer-frequency').val() }
-                ]);
+                    template.get('sensors').add([
+                        { name: 'accelerometer', state: $('#accelerometer-switch').val(),
+                        frequency: $('#accelerometer-frequency').val() }
+                    ]);
 
-                template.get('sensors').add([
-                    { name: 'gps', state: $('#gps-switch').val(),
-                        frequency: $('#gps-frequency').val() }
-                ]);
+                    template.get('sensors').add([
+                        { name: 'gps', state: $('#gps-switch').val(),
+                            frequency: $('#gps-frequency').val() }
+                    ]);
                  
-                if($('#schedule-switch').val() == 'on') {
-                    template.set({schedule: {start: 'Start Day', end: 'End Day', repeat: 'Monday' } });
+                    if($('#schedule-switch').val() == 'on') {
+                        template.set({schedule: {start: 'Start Day', end: 'End Day', repeat: 'Monday' } });
+                    }
+                 
+                    template.save();
+                    this.model = template;
+                } else {
+                    // Update Existing Model
+                    var template = this.model;
+
+                    template.set({name: $('#template-name').val()});
+
+                    template.save();
                 }
-                 
-                template.save();
+
                 $('#save-template').hide();
                 $('#start-template').show();
             }
         },
         back: function(event) {
             event.preventDefault();
-            $.mobile.changePage($('#settings'), { transition: 'none', reverse: true, changeHash: true });
+            $.mobile.changePage($('#settings'), { transition: 'none', reverse: true, changeHash: false });
             $('.ui-btn-active').removeClass('ui-btn-active');
         },
         schedule_switch: function(event) {
@@ -252,7 +246,7 @@ var datalogger = function() {
         },
         back: function(event) {
             event.preventDefault();
-            $.mobile.changePage($('#add-template'), { transition: 'none', reverse: true, changeHash: true });
+            $.mobile.changePage($('#add-template'), { transition: 'none', reverse: true, changeHash: false });
             $('.ui-btn-active').removeClass('ui-btn-active');
             
             if(this.watchID) {
@@ -297,10 +291,10 @@ var datalogger = function() {
             'click #schedule-template-done': 'done'
         },
         back: function(event) {
-            $.mobile.changePage($('#add-template'), { transition: 'none', reverse: true, changeHash: true });
+            $.mobile.changePage($('#add-template'), { transition: 'none', reverse: true, changeHash: false });
         },
         done: function(event) {
-            $.mobile.changePage($('#add-template'), { transition: 'none', reverse: true, changeHash: true });
+            $.mobile.changePage($('#add-template'), { transition: 'none', reverse: true, changeHash: false });
         },
     });
 
@@ -317,7 +311,7 @@ var datalogger = function() {
             'click #repeat-sun': 'sunday'
         },
         back: function(event) {
-            $.mobile.changePage($('#schedule-template'), { transition: 'none', reverse: true, changeHash: true });
+            $.mobile.changePage($('#schedule-template'), { transition: 'none', reverse: true, changeHash: false });
         },
         monday: function(event) {
             event.preventDefault();
@@ -354,6 +348,39 @@ var datalogger = function() {
 
     var templateListView = new TemplateListView({ model: templates });
     var addTemplateView = new AddTemplateView();
+
+    var TemplateItemView = Backbone.View.extend({
+        tagName: 'li',
+        className: 'tall-list',
+        events: {
+            'click a': 'template_click'
+        },
+        template: _.template($('#template-list-item').html()),
+        template_click: function(event) {
+            event.preventDefault();
+            addTemplateView.model = this.model;
+            $.mobile.changePage($('#add-template'), { transition: 'none', reverse: false, changeHash: false });
+            $('#template-name').val(this.model.get('name'));
+            $('#accelerometer-switch').val(this.model.get('sensors').at(0).get('state')).slider('refresh');
+            $('#gps-switch').val(this.model.get('sensors').at(1).get('state')).slider('refresh');
+            if(this.model.has('schedule')) {
+                //.. show schedule
+                $('#schedule-switch').val('on').slider('refresh');
+                $('#schedule-block').show();
+            } else {
+                $('#schedule-switch').val('off').slider('refresh');
+                $('#schedule-block').hide();
+            }
+            $('#save-template').hide();
+            $('#start-template').show();
+        },
+        render: function(eventName) {
+            $(this.el).html(this.template(this.model.toJSON()));
+            return this;
+        }
+    });
+
+
     var accelerometerView = new AccelerometerView();
     var scheduleView = new ScheduleView();
     var repeatView = new RepeatView();
@@ -384,6 +411,7 @@ var datalogger = function() {
 
         add_template: function() {
             $.mobile.changePage($('#add-template'), { transition: 'none', reverse: false, changeHash: false });
+            addTemplateView.model = null;
             $('.ui-btn-active').removeClass('ui-btn-active');
             $('#template-name').val('');
             $('#schedule-switch').val('Off').slider('refresh');
