@@ -132,7 +132,27 @@ var datalogger = function() {
     var TemplateItemView = Backbone.View.extend({
         tagName: 'li',
         className: 'tall-list',
+        events: {
+            'click a': 'template_click'
+        },
         template: _.template($('#template-list-item').html()),
+        template_click: function(event) {
+            event.preventDefault();
+            $.mobile.changePage($('#add-template'), { transition: 'none', reverse: false, changeHash: false });
+            $('#template-name').val(this.model.get('name'));
+            $('#accelerometer-switch').val(this.model.get('sensors').at(0).get('state')).slider('refresh');
+            $('#gps-switch').val(this.model.get('sensors').at(1).get('state')).slider('refresh');
+            if(this.model.has('schedule')) {
+                //.. show schedule
+                $('#schedule-switch').val('on').slider('refresh');
+                $('#schedule-block').show();
+            } else {
+                $('#schedule-switch').val('off').slider('refresh');
+                $('#schedule-block').hide();
+            }
+            $('#save-template').hide();
+            $('#start-template').show();
+        },
         render: function(eventName) {
             $(this.el).html(this.template(this.model.toJSON()));
             return this;
@@ -162,8 +182,13 @@ var datalogger = function() {
                 });
 
                 template.get('sensors').add([
-                    { name: 'accelerometer', on: $('#accelerometer-switch').val(),
+                    { name: 'accelerometer', state: $('#accelerometer-switch').val(),
                       frequency: $('#accelerometer-frequency').val() }
+                ]);
+
+                template.get('sensors').add([
+                    { name: 'gps', state: $('#gps-switch').val(),
+                        frequency: $('#gps-frequency').val() }
                 ]);
                  
                 if($('#schedule-switch').val() == 'on') {
@@ -365,7 +390,6 @@ var datalogger = function() {
             $('#schedule-block').hide();
             $('#accelerometer-switch').val('Off').slider('refresh');
             $('#gps-switch').val('Off').slider('refresh');
-            $('#camera-switch').val('Off').slider('refresh');
         },
         accelerometer_template: function() {
             $.mobile.changePage($('#accelerometer-template'), { transition: 'none', reverse: false, changeHash: false })
