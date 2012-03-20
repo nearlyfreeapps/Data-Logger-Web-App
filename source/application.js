@@ -155,6 +155,37 @@ var datalogger = function() {
             'click #delete': 'delete_template',
             'click #delete-confirm': 'delete_confirm'
         },
+        init: function(model) {
+            this.model = model;
+            if(this.model == null) {
+                //Configure Empty Add Template View
+                $('#template-name').val('');
+                $('#schedule-switch').val('Off').slider('refresh');
+                $('#schedule-block').hide();
+                $('#accelerometer-switch').val('Off').slider('refresh');
+                $('#gps-switch').val('Off').slider('refresh');
+                $('#delete-list').hide();
+            } else {
+                //Configure Existing Template View
+                $('#template-name').val(this.model.get('name'));
+                $('#accelerometer-switch').val(this.model.get('sensors').at(0).get('state')).slider('refresh');
+                $('#gps-switch').val(this.model.get('sensors').at(1).get('state')).slider('refresh');
+                
+                if(this.model.has('schedule')) {
+                    //.. show schedule
+                    $('#schedule-switch').val('on').slider('refresh');
+                    $('#schedule-block').show();
+                } else {
+                    $('#schedule-switch').val('off').slider('refresh');
+                    $('#schedule-block').hide();
+                }
+            
+                $('#delete-list').show();
+                $('#delete-confirm-block').hide();
+                $('#save-template').hide();
+                $('#start-template').show();
+            }
+        },
         delete_template: function(event) {
             event.preventDefault();
             $('#delete-confirm-block').toggle();
@@ -376,23 +407,8 @@ var datalogger = function() {
         template: _.template($('#template-list-item').html()),
         template_click: function(event) {
             event.preventDefault();
-            addTemplateView.model = this.model;
             $.mobile.changePage($('#add-template'), { transition: 'none', reverse: false, changeHash: false });
-            $('#template-name').val(this.model.get('name'));
-            $('#accelerometer-switch').val(this.model.get('sensors').at(0).get('state')).slider('refresh');
-            $('#gps-switch').val(this.model.get('sensors').at(1).get('state')).slider('refresh');
-            if(this.model.has('schedule')) {
-                //.. show schedule
-                $('#schedule-switch').val('on').slider('refresh');
-                $('#schedule-block').show();
-            } else {
-                $('#schedule-switch').val('off').slider('refresh');
-                $('#schedule-block').hide();
-            }
-            $('#delete-list').show();
-            $('#delete-confirm-block').hide();
-            $('#save-template').hide();
-            $('#start-template').show();
+            addTemplateView.init(this.model);
         },
         render: function(eventName) {
             $(this.el).html(this.template(this.model.toJSON()));
@@ -431,14 +447,8 @@ var datalogger = function() {
 
         add_template: function() {
             $.mobile.changePage($('#add-template'), { transition: 'none', reverse: false, changeHash: false });
-            addTemplateView.model = null;
+            addTemplateView.init(null);
             $('.ui-btn-active').removeClass('ui-btn-active');
-            $('#template-name').val('');
-            $('#schedule-switch').val('Off').slider('refresh');
-            $('#schedule-block').hide();
-            $('#accelerometer-switch').val('Off').slider('refresh');
-            $('#gps-switch').val('Off').slider('refresh');
-            $('#delete-list').hide();
         },
         accelerometer_template: function() {
             $.mobile.changePage($('#accelerometer-template'), { transition: 'none', reverse: false, changeHash: false })
