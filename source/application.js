@@ -305,6 +305,9 @@ var datalogger = function() {
 
     });
 
+    var accelerometerView = new AccelerometerView();
+    var gpsView = new GPSView();
+
     var AddTemplateView = Backbone.View.extend({
         el: $('#add-template'),
         initialize: function() {
@@ -526,8 +529,6 @@ var datalogger = function() {
 
     var templateListView = new TemplateListView({ model: templates });
     var addTemplateView = new AddTemplateView();
-    var accelerometerView = new AccelerometerView();
-    var gpsView = new GPSView();
 
     var TemplateItemView = Backbone.View.extend({
         tagName: 'li',
