@@ -227,7 +227,6 @@ var datalogger = function() {
             accelerometerPlot.draw();
         },
         onAccelError: function() {
-            alert("Accelerometer Error");
             console.log("Accelerometer Error");
         }
     });
@@ -280,7 +279,6 @@ var datalogger = function() {
             alert("Latitude: " + coords[0] + " Longitude: " + coords[1]);
         },
         onGpsError: function() {
-            alert("GPS Error");
             console.log("GPS Error");
         },
     });
@@ -385,9 +383,9 @@ var datalogger = function() {
             'click #gps-temp': 'gps_template'
         },
         accelerometer_template: function(event) {
-        
+            event.preventDefault();
+
             if ($('#accelerometer-switch').val() == "on") {
-                event.preventDefault();
                 $.mobile.changePage($('#accelerometer-template'), { transition: 'none', reverse: false, changeHash: false });
                 $('.ui-btn-active').removeClass('ui-btn-active');
 
@@ -400,9 +398,9 @@ var datalogger = function() {
             }
         },
         gps_template: function(event) {
-        
+            event.preventDefault();
+
             if ($('#gps-switch').val() == "on") {
-                event.preventDefault();
                 $.mobile.changePage($('#gps-template'), { transition: 'none', reverse: false, changeHash: false })
                 $('.ui-btn-active').removeClass('ui-btn-active');
                 
