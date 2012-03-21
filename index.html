@@ -105,17 +105,17 @@
         <div id="sensor-title">Sensors</div>
         <ul data-role="listview" data-inset="true">
             <li class="tall-list">
-            <a href="#accelerometer-template">Accelerometer
+            <a id="accelerometer-temp" href="#accelerometer-template">Accelerometer
                 <div style="float:right;margin-right: 25px;">
-                <select name="slider" id="accelerometer-switch" data-role="slider" data-mini="true">
+                <select style="z-index: 2;" name="slider" id="accelerometer-switch" data-role="slider" data-mini="true">
                     <option value="off">Off</option>
                     <option value="on">On</option>
                 </select>
                 </div>
             </a></li>
-            <li class="tall-list"><a href="#">GPS
+            <li class="tall-list"><a id="gps-temp" href="#gps-template">GPS
                 <div style="float:right;margin-right: 25px;">
-                <select name="slider" id="gps-switch" data-role="slider" data-mini="true">
+                <select style="z-index: 2;" name="slider" id="gps-switch" data-role="slider" data-mini="true">
                     <option value="off">Off</option>
                     <option value="on">On</option>
                 </select>
@@ -168,6 +168,44 @@
             <li class="tall-list">
                 <div data-role="fieldcontain">
                     <div id="accelerometer-graph" style="width: 260px; height: 150px;"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!--<div class="tabbar" data-id="bottom-footer"  data-tap-toggle="false" data-role="footer" data-position="fixed">
+        <div class="tabbar" data-role="navbar">
+            <ul>
+                <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
+                <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
+            </ul>
+        </div>
+    </div>--!>
+</div>
+
+<!-- GPS View -->
+<div id="gps-template" data-role="page">
+	<div data-role="header"  data-tap-toggle="false" data-position="fixed">
+        <a href="#" id="gps-template-back" data-icon="back">Back</a>
+		<h1>GPS</h1>
+	</div>
+    
+    <div data-role="content">
+        <div id="sensor-title">Log Settings</div>
+        <ul data-role="listview" data-inset="true">
+            <li class="tall-list">Frequency<div style="float:right;">Hz</a></li>
+        </ul>
+
+        <div style="min-height: 30px;" data-role="fieldcontain">
+            <input type="range" id="gps-frequency" name="slider" id="slider-fill" value="10" min="1" max="25" data-highlight="true" />
+        </div>
+
+
+        <div id="sensor-title">Live View</div>
+        <ul data-role="listview" data-inset="true">
+            <li class="tall-list">
+                <div data-role="fieldcontain">
+                    <div id="gps-view" style="width: 260px; height: 150px;">Loading GPS Data...</div>
                 </div>
             </li>
         </ul>

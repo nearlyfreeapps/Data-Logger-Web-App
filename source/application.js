@@ -155,7 +155,34 @@ var datalogger = function() {
             'change #gps-switch': 'gps_switch',
             'change #template-name': 'template_name',
             'click #delete': 'delete_template',
-            'click #delete-confirm': 'delete_confirm'
+            'click #delete-confirm': 'delete_confirm',
+            'click #accelerometer-temp': 'accelerometer_template',
+            'click #gps-temp': 'gps_template'
+        },
+        accelerometer_template: function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $.mobile.changePage($('#accelerometer-template'), { transition: 'none', reverse: false, changeHash: false });
+            $('.ui-btn-active').removeClass('ui-btn-active');
+            accelerometerView.plot();
+            if(this.model != null) {
+                $('#accelerometer-frequency').val(this.model.get('sensors').at(0).get('frequency')).slider('refresh');
+            } else {
+                $('#accelerometer-frequency').val('10').slider('refresh');
+            }
+        },
+        gps_template: function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $.mobile.changePage($('#gps-template'), { transition: 'none', reverse: false, changeHash: false })
+            $('.ui-btn-active').removeClass('ui-btn-active');
+
+            if(this.model != null) {
+                $('#gps-frequency').val(this.model.get('sensors').at(1).get('frequency')).slider('refresh');
+            } else {
+                $('#gps-frequency').val('10').slider('refresh');
+
+            }
         },
         init: function(model) {
             this.model = model;
@@ -170,7 +197,6 @@ var datalogger = function() {
             $('#start-date-time').text('N/A');
             $('#end-date-time').text('N/A');
             $('#repeats').text('None');
-
             if(this.model == null) {
                 //Configure Empty Add Template View
                 $('#template-name').val('');
@@ -188,6 +214,7 @@ var datalogger = function() {
                     //.. show schedule
                     $('#schedule-switch').val('on').slider('refresh');
                     $('#schedule-block').show();
+                    
                     $('#start-date').val(this.model.get('schedule').get('start_date'));
                     $('#start-time').val(this.model.get('schedule').get('start_time'));
                     $('#end-date').val(this.model.get('schedule').get('end_date'));
@@ -315,10 +342,12 @@ var datalogger = function() {
             }
         },
         accelerometer_switch: function(event) {
+            event.preventDefault();
             $('#start-template').hide();
             $('#save-template').show();
         },
         gps_switch: function(event) {
+            event.preventDefault();
             $('#start-template').hide();
             $('#save-template').show();
         },
@@ -365,6 +394,9 @@ var datalogger = function() {
             accelPoints.reset();
         },
         frequency_change: function(event) {
+            $('#start-template').hide();
+            $('#save-template').show();
+
             if(this.watchID) {
                 navigator.accelerometer.clearWatch(this.watchID);
                 this.watchID = null;
@@ -388,6 +420,29 @@ var datalogger = function() {
         onAccelError: function() {
             console.log("Accelerometer Error");
         }
+    });
+
+    var GPSView = Backbone.View.extend({
+        el: $('#gps-template'),
+        initialize: function() {
+            this.render();
+        },
+        events: {
+            'click #gps-template-back': 'back',
+            'change #gps-frequency': 'frequency_change'
+        },
+        back: function(event) {
+            event.preventDefault();
+            $.mobile.changePage($('#add-template'), { transition: 'none', reverse: true, changeHash: false });
+            $('.ui-btn-active').removeClass('ui-btn-active');
+                    },
+        frequency_change: function(event) {
+            $('#start-template').hide();
+            $('#save-template').show();
+        },
+        render: function(eventName) {
+            return this;
+        },
     });
 
     var ScheduleView = Backbone.View.extend({
@@ -492,6 +547,7 @@ var datalogger = function() {
 
 
     var accelerometerView = new AccelerometerView();
+    var gpsView = new GPSView();
     var scheduleView = new ScheduleView();
     var repeatView = new RepeatView();
     templates.fetch();
@@ -502,7 +558,6 @@ var datalogger = function() {
             'settings': 'settings',
             'logs': 'logs',
             'add-template': 'add_template',
-            'accelerometer-template': 'accelerometer_template',
             'schedule-template': 'schedule_template',
             'repeat-template': 'repeat_template'
         },
@@ -523,11 +578,6 @@ var datalogger = function() {
             $.mobile.changePage($('#add-template'), { transition: 'none', reverse: false, changeHash: false });
             addTemplateView.init(null);
             $('.ui-btn-active').removeClass('ui-btn-active');
-        },
-        accelerometer_template: function() {
-            $.mobile.changePage($('#accelerometer-template'), { transition: 'none', reverse: false, changeHash: false })
-            $('.ui-btn-active').removeClass('ui-btn-active');
-            accelerometerView.plot();
         },
         schedule_template: function() {
             $.mobile.changePage($('#schedule-template'), { transition: 'none', reverse: false, changeHash: false });
