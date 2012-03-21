@@ -51,6 +51,16 @@ var datalogger = function() {
             z: [0,0]
         },
     });
+    
+    var GpsPointModel = Backbone.Model.extend({
+        defaults: {
+            latitude:         0.0,
+            longitude:        0.0,
+            altitude:         0.0, 
+            heading:          0.0, 
+            speed:            0.0
+        },
+    });
 
     var AccelPointCollection = Backbone.Collection.extend({
         model: AccelPointModel,
@@ -99,6 +109,24 @@ var datalogger = function() {
             });
 
             return points
+        }
+    });
+    
+    var GpsPointCollection = Backbone.Collection.extend({
+        model: GpsPointModel,
+        addLocation: function(position) {
+ 
+            if (this.length == 100) {
+                this.remove(this.at(0));
+            }
+            
+            this.unshift({ latitude: position.coords.latitude, longitude: position.coords.longitude, 
+            altitude: position.coords.altitude, heading: position.coords.heading, speed: position.coords.speed,  });
+        },
+        getLastCoords: function() {
+            var coords = [];
+            coords.push(this.at(0).pluck("latitude"), this.at(0).pluck("longitude"));
+            return coords;
         }
     });
 
@@ -204,9 +232,11 @@ var datalogger = function() {
         }
     });
 
+    var gpsPoints = new GpsPointCollection();
     var GPSView = Backbone.View.extend({
         el: $('#gps-template'),
         initialize: function() {
+            this.watchID = null;
             this.render();
         },
         events: {
@@ -217,13 +247,40 @@ var datalogger = function() {
             event.preventDefault();
             $.mobile.changePage($('#add-template'), { transition: 'none', reverse: true, changeHash: false });
             $('.ui-btn-active').removeClass('ui-btn-active');
-                    },
+            
+            if (this.watchID) {
+                navigator.geolocation.clearWatch(this.watchID);
+                this.watchID = null;
+            }
+            
+            gpsPoints.reset();
+        },
         frequency_change: function(event) {
             $('#start-template').hide();
             $('#save-template').show();
+            
+            if(this.watchID) {
+                navigator.geolocation.clearWatch(this.watchID);
+                this.watchID = null;
+            }
+
+            this.plot();
         },
         render: function(eventName) {
             return this;
+        },
+        plot: function() {
+            var frequency = 1000 / $('#gps-frequency').val();
+            var options = { frequency: frequency};
+            this.watchID = navigator.geolocation.watchPosition(this.onGpsSuccess, this.onGpsError, options);
+        },
+        onGpsSuccess: function(position) {
+            gpsPoints.addLocation(position);
+            coords = gpsPoints.getLastCoords();
+            alert("Lat: " + coords[0] + " Lon: " + coords[1]);
+        },
+        onGpsError: function() {
+            console.log("GPS Error");
         },
     });
 
