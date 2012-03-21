@@ -385,29 +385,35 @@ var datalogger = function() {
             'click #gps-temp': 'gps_template'
         },
         accelerometer_template: function(event) {
-            event.preventDefault();
-            $.mobile.changePage($('#accelerometer-template'), { transition: 'none', reverse: false, changeHash: false });
-            $('.ui-btn-active').removeClass('ui-btn-active');
+        
+            if ($('#accelerometer-switch').val() == "on") {
+                event.preventDefault();
+                $.mobile.changePage($('#accelerometer-template'), { transition: 'none', reverse: false, changeHash: false });
+                $('.ui-btn-active').removeClass('ui-btn-active');
 
-            if(this.model != null) {
-                $('#accelerometer-frequency').val(this.model.get('sensors').at(0).get('frequency')).slider('refresh');
-            } else {
-                $('#accelerometer-frequency').val('10').slider('refresh');
+                if(this.model != null) {
+                    $('#accelerometer-frequency').val(this.model.get('sensors').at(0).get('frequency')).slider('refresh');
+                } else {
+                    $('#accelerometer-frequency').val('10').slider('refresh');
+                }
+                accelerometerView.plot();
             }
-            accelerometerView.plot();
         },
         gps_template: function(event) {
-            event.preventDefault();
-            $.mobile.changePage($('#gps-template'), { transition: 'none', reverse: false, changeHash: false })
-            $('.ui-btn-active').removeClass('ui-btn-active');
-            
-            if(this.model != null) {
-                $('#gps-frequency').val(this.model.get('sensors').at(1).get('frequency')).slider('refresh');
-            } else {
-                $('#gps-frequency').val('10').slider('refresh');
+        
+            if ($('#gps-switch').val() == "on") {
+                event.preventDefault();
+                $.mobile.changePage($('#gps-template'), { transition: 'none', reverse: false, changeHash: false })
+                $('.ui-btn-active').removeClass('ui-btn-active');
+                
+                if(this.model != null) {
+                    $('#gps-frequency').val(this.model.get('sensors').at(1).get('frequency')).slider('refresh');
+                } else {
+                    $('#gps-frequency').val('10').slider('refresh');
+                }
+                
+                gpsView.plot();
             }
-            
-            gpsView.plot();
         },
         init: function(model) {
             this.model = model;
