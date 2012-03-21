@@ -115,17 +115,19 @@ var datalogger = function() {
     var GpsPointCollection = Backbone.Collection.extend({
         model: GpsPointModel,
         addLocation: function(position) {
- 
+            alert("Collection::addLocation - start");
             if (this.length == 100) {
                 this.remove(this.at(0));
             }
             
-            this.unshift({ latitude: position.coords.latitude, longitude: position.coords.longitude, 
-            altitude: position.coords.altitude, heading: position.coords.heading, speed: position.coords.speed,  });
+            this.add({ latitude: position.coords.latitude, longitude: position.coords.longitude, 
+            altitude: position.coords.altitude, heading: position.coords.heading, speed: position.coords.speed  });
+            alert("Collection::addLocation - end");
         },
         getLastCoords: function() {
+            alert("Collection::getLastCoords - start");
             var coords = [];
-            coords.push(this.at(0).pluck("latitude"), this.at(0).pluck("longitude"));
+            coords.push(this.at(this.length-1).get("latitude"), this.at(this.length-1).get("longitude"));
             return coords;
         }
     });
@@ -275,11 +277,13 @@ var datalogger = function() {
             this.watchID = navigator.geolocation.watchPosition(this.onGpsSuccess, this.onGpsError, options);
         },
         onGpsSuccess: function(position) {
+            alert("Called on gpsSuccess");
             gpsPoints.addLocation(position);
             coords = gpsPoints.getLastCoords();
             alert("Lat: " + coords[0] + " Lon: " + coords[1]);
         },
         onGpsError: function() {
+            alert("GPS Error");
             console.log("GPS Error");
         },
     });
