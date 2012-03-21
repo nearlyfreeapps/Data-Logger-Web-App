@@ -404,8 +404,9 @@ var datalogger = function() {
                 $('#gps-frequency').val(this.model.get('sensors').at(1).get('frequency')).slider('refresh');
             } else {
                 $('#gps-frequency').val('10').slider('refresh');
-
             }
+            
+            gpsView.plot();
         },
         init: function(model) {
             this.model = model;
