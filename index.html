@@ -96,7 +96,7 @@
                 <div style="float: right;text-align: right;margin-right: 25px;">
                     <div id="start-date-time">N/A</div><br>
                     <div id="end-date-time">N/A</div><br>
-                    <div id="repeats">None</div><br>
+                    <div style="text-transform:capitalize;" id="repeats">None</div><br>
                 </div>
                 </a>
             </li>
@@ -188,7 +188,6 @@
 	<div data-role="header"  data-tap-toggle="false" data-position="fixed">
         <a href="#" id="schedule-template-back" data-icon="back">Back</a>
 		<h1>Start & End</h1>
-        <a href="#" id="schedule-template-done" data-icon="check" data-theme="b">Done</a>
 	</div>
     
     <div data-role="content">
@@ -231,13 +230,13 @@
     
     <div data-role="content">
         <ul data-role="listview" id="repeat-list" data-inset="true">
-            <li class="tall-list" id="repeat-mon" data-icon="false"><a href="#">Monday<div id="mon-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
-            <li class="tall-list" id="repeat-tue" data-icon="false"><a href="#">Tuesday<div id="tue-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
-            <li class="tall-list" id="repeat-wed" data-icon="false"><a href="#">Wednesday<div id="wed-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
-            <li class="tall-list" id="repeat-thu" data-icon="false"><a href="#">Thursday<div id="thu-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
-            <li class="tall-list" id="repeat-fri" data-icon="false"><a href="#">Friday<div id="fri-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
-            <li class="tall-list" id="repeat-sat" data-icon="false"><a href="#">Saturday<div id="sat-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
-            <li class="tall-list" id="repeat-sun" data-icon="false"><a href="#">Sunday<div id="sun-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
+            <li class="tall-list repeat" id="repeat-mon" data-icon="false"><a href="#">Monday<div class="day-check" id="mon-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
+            <li class="tall-list repeat" id="repeat-tue" data-icon="false"><a href="#">Tuesday<div class="day-check" id="tue-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
+            <li class="tall-list repeat" id="repeat-wed" data-icon="false"><a href="#">Wednesday<div class="day-check" id="wed-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
+            <li class="tall-list repeat" id="repeat-thu" data-icon="false"><a href="#">Thursday<div class="day-check" id="thu-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
+            <li class="tall-list repeat" id="repeat-fri" data-icon="false"><a href="#">Friday<div class="day-check" id="fri-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
+            <li class="tall-list repeat" id="repeat-sat" data-icon="false"><a href="#">Saturday<div class="day-check" id="sat-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
+            <li class="tall-list repeat" id="repeat-sun" data-icon="false"><a href="#">Sunday<div class="day-check" id="sun-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
         </ul>
     </div>
 
