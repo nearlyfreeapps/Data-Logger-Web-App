@@ -281,32 +281,17 @@ var datalogger = function() {
             this.watchID = navigator.geolocation.watchPosition(this.onGpsSuccess, this.onGpsError, options);
         },
         onGpsSuccess: function(position) {
-            $('#gps_loading').hide();
             gpsPoints.addLocation(position);
             coords = gpsPoints.getLastCoords();
-            /*var url = "http://maps.google.com/maps/api/staticmap?center=" + coords[0] + "," + coords[1] + "&zoom=13&size=260x150&maptype=roadmap&markers=color:blue%7C" + coords[0] + "," + coords[1] + "&sensor=true";
+            var url = "http://maps.google.com/maps/api/staticmap?center=" + coords[0] + "," + coords[1] + "&zoom=13&size=260x150&maptype=roadmap&markers=color:blue%7C" + coords[0] + "," + coords[1] + "&sensor=true";
             if(url != this.url) {
-                $('#gps-view').html('<img style="border: 1px solid #000" src="' + url + '"><br><br><strong>Latitude:</strong> ' + coords[0] + '<br><strong>Longitude:</strong> ' + coords[1]);
+                $('#map_canvas').html('<img style="border: 1px solid #000" src="' + url + '">');
                 setTimeout(function() {
-                    $('#gps-view').show();
-                }, 1000);
-            }*/
-            var coord = new google.maps.LatLng(coords[0], coords[1]);
-            var myOptions = {
-                center: coord,
-                zoom: 15,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            $('#map_canvas').show();
-            var map = new google.maps.Map(document.getElementById("map_canvas"),
-                myOptions);
-
-            var marker = new google.maps.Marker({
-                map: map,
-                position: coord
-            });
-            alert('gps success');
-            $('#lat_long').html('<br>Latitude: ' + coords[0] + '<br>Longitude: ' + coords[1]);
+                    $('#gps_loading').hide();
+                    $('#map_canvas').show();
+                    $('#lat_long').html('<br>Latitude: ' + coords[0] + '<br>Longitude: ' + coords[1]);
+                }, 2500);
+            }
         },
         onGpsError: function() {
             console.log("GPS Error");
