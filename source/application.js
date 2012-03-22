@@ -268,7 +268,13 @@ var datalogger = function() {
         },
         plot: function() {
             var frequency = 1000 / $('#gps-frequency').val();
-            var options = { frequency: frequency, maximumAge: frequency };
+            var options = { frequency: frequency, maximumAge: frequency, timeout: frequency };
+
+            if(this.watchID) {
+                navigator.geolocation.clearWatch(this.watchID);
+                this.watchID = null;
+            }
+
             this.watchID = navigator.geolocation.watchPosition(this.onGpsSuccess, this.onGpsError, options);
         },
         onGpsSuccess: function(position) {
