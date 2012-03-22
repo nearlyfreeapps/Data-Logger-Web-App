@@ -270,7 +270,7 @@ var datalogger = function() {
         },
         plot: function() {
             var frequency = 1000 / $('#gps-frequency').val();
-            var options = { frequency: frequency, maximumAge: frequency, timeout: frequency };
+            var options = { frequency: frequency, maximumAge: frequency};
             this.url = '';
 
             if(this.watchID) {
@@ -284,14 +284,15 @@ var datalogger = function() {
             gpsPoints.addLocation(position);
             coords = gpsPoints.getLastCoords();
             var url = "http://maps.google.com/maps/api/staticmap?center=" + coords[0] + "," + coords[1] + "&zoom=13&size=260x150&maptype=roadmap&markers=color:blue%7C" + coords[0] + "," + coords[1] + "&sensor=true";
-            if(url != this.url) {
-                $('#map_canvas').html('<img style="border: 1px solid #000" src="' + url + '">');
-                setTimeout(function() {
-                    $('#gps_loading').hide();
-                    $('#map_canvas').show();
-                    $('#lat_long').html('<br>Latitude: ' + coords[0] + '<br>Longitude: ' + coords[1]);
-                }, 2500);
-            }
+
+            var map_image = new Image();
+            map_image.onload = function() {
+                $('#gps_loading').hide();
+                $('#map_img').attr('src', url);
+                $('#map_canvas').show();
+                $('#lat_long').html('<br>Latitude: ' + coords[0] + '<br>Longitude: ' + coords[1]);
+            };
+            map_image.src = url;
         },
         onGpsError: function() {
             console.log("GPS Error");
