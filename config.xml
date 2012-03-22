@@ -3,6 +3,7 @@
   <name>Smart Phone Data Logger</name>
   <author href="http://cmer.uoguelph.ca/">CIS 3760 Software Engineering</author>
   <preference name="orientation" value="portrait" />
+  <access subdomains="true" uri="http://maps.google.com"/>
   <access subdomains="true" uri="*"/>
   <icon src="assets/images/icon.png"/>
   <content src="index.html"/>
