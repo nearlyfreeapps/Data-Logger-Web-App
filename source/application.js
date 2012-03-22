@@ -292,6 +292,12 @@ var datalogger = function() {
                 $('#map_canvas').show();
                 $('#lat_long').html('<br>Latitude: ' + coords[0] + '<br>Longitude: ' + coords[1]);
             };
+
+            map_image.onerror = function(msg, file_loc, line_num) {
+                alert('Error Loading Image: ' + msg);
+                $('#gps_loading').hide();
+                $('#lat_long').html('<br>Latitude: ' + coords[0] + '<br>Longitude: ' + coords[1]);
+            }
             map_image.src = url;
         },
         onGpsError: function() {
