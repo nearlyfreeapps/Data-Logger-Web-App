@@ -285,7 +285,11 @@ var datalogger = function() {
             coords = gpsPoints.getLastCoords();
             var url = "http://maps.google.com/maps/api/staticmap?center=" + coords[0] + "," + coords[1] + "&zoom=13&size=260x150&maptype=roadmap&markers=color:blue%7C" + coords[0] + "," + coords[1] + "&sensor=true";
             if(url != this.url) {
+                $('#gps-view').hide();
                 $('#gps-view').html('<img style="border: 1px solid #000" src="' + url + '"><br><br><strong>Latitude:</strong> ' + coords[0] + '<br><strong>Longitude:</strong> ' + coords[1]);
+                setTimeout(function() {
+                    $('#gps-view').show();
+                }, 1000);
             }
 
             this.url = url;
