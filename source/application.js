@@ -281,10 +281,11 @@ var datalogger = function() {
             this.watchID = navigator.geolocation.watchPosition(this.onGpsSuccess, this.onGpsError, options);
         },
         onGpsSuccess: function(position) {
+            $('#gps_loading').hide();
             gpsPoints.addLocation(position);
             coords = gpsPoints.getLastCoords();
-            var url = "http://maps.google.com/maps/api/staticmap?center=" + coords[0] + "," + coords[1] + "&zoom=13&size=260x150&maptype=roadmap&markers=color:blue%7C" + coords[0] + "," + coords[1] + "&sensor=true";
-            /*if(url != this.url) {
+            /*var url = "http://maps.google.com/maps/api/staticmap?center=" + coords[0] + "," + coords[1] + "&zoom=13&size=260x150&maptype=roadmap&markers=color:blue%7C" + coords[0] + "," + coords[1] + "&sensor=true";
+            if(url != this.url) {
                 $('#gps-view').html('<img style="border: 1px solid #000" src="' + url + '"><br><br><strong>Latitude:</strong> ' + coords[0] + '<br><strong>Longitude:</strong> ' + coords[1]);
                 setTimeout(function() {
                     $('#gps-view').show();
@@ -304,9 +305,7 @@ var datalogger = function() {
                 map: map,
                 position: coord
             });
-            
-
-            this.url = url;
+            $('#lat_long').html('<br>Latitude: ' + coords[0] + '<br>Longitude: ' + coords[1]);
         },
         onGpsError: function() {
             console.log("GPS Error");
@@ -439,7 +438,7 @@ var datalogger = function() {
                 } else {
                     $('#gps-frequency').val('10').slider('refresh');
                 }
-                $('#gps-view').html('Loading GPS Data <img src="assets/images/loading.gif">');
+                $('#gps_loading').show();
                 gpsView.plot();
             }
         },
