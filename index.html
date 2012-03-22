@@ -24,6 +24,9 @@
             $.mobile.pushStateEnabled = false;
         });
     </script>
+    <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBcLqMKiCK8ik3mT7uA0pxTkz_7mm3uDts&sensor=true">
+    </script>
 	<script src="assets/js/libs/jquery.mobile-1.1.0.min.js"></script>
     <script src="assets/js/libs/jquery.mobile.datebox-1.0.1.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
@@ -207,6 +210,7 @@
             <li class="tall-list">
                 <div data-role="fieldcontain">
                     <div id="gps-view" style="width: 260px;">Loading GPS Data <img src="assets/images/loading.gif"></div>
+                    <div id="map_canvas" style="width: 260px; height: 150px;"></div>
                 </div>
             </li>
         </ul>

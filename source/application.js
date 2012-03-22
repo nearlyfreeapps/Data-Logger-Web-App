@@ -284,13 +284,27 @@ var datalogger = function() {
             gpsPoints.addLocation(position);
             coords = gpsPoints.getLastCoords();
             var url = "http://maps.google.com/maps/api/staticmap?center=" + coords[0] + "," + coords[1] + "&zoom=13&size=260x150&maptype=roadmap&markers=color:blue%7C" + coords[0] + "," + coords[1] + "&sensor=true";
-            if(url != this.url) {
-                $('#gps-view').hide();
+            /*if(url != this.url) {
                 $('#gps-view').html('<img style="border: 1px solid #000" src="' + url + '"><br><br><strong>Latitude:</strong> ' + coords[0] + '<br><strong>Longitude:</strong> ' + coords[1]);
                 setTimeout(function() {
                     $('#gps-view').show();
                 }, 1000);
-            }
+            }*/
+            var coord = new google.maps.LatLng(coords[0], coords[1]);
+            var myOptions = {
+                center: coord,
+                zoom: 15,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            
+            var map = new google.maps.Map(document.getElementById("map_canvas"),
+                myOptions);
+
+            var marker = new google.maps.Marker({
+                map: map,
+                position: coord
+            });
+            
 
             this.url = url;
         },
