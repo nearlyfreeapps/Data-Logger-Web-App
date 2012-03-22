@@ -235,7 +235,6 @@ var datalogger = function() {
         el: $('#gps-template'),
         initialize: function() {
             this.watchID = null;
-            this.url = '';
             this.render();
         },
         events: {
@@ -246,7 +245,7 @@ var datalogger = function() {
             event.preventDefault();
             $.mobile.changePage($('#add-template'), { transition: 'none', reverse: true, changeHash: false });
             $('.ui-btn-active').removeClass('ui-btn-active');
-            
+
             if (this.watchID) {
                 navigator.geolocation.clearWatch(this.watchID);
                 this.watchID = null;
@@ -261,7 +260,6 @@ var datalogger = function() {
             if(this.watchID) {
                 navigator.geolocation.clearWatch(this.watchID);
                 this.watchID = null;
-                this.url = '';
                 this.plot();
             }
         },
@@ -270,8 +268,7 @@ var datalogger = function() {
         },
         plot: function() {
             var frequency = 1000 / $('#gps-frequency').val();
-            var options = { frequency: frequency, maximumAge: frequency};
-            this.url = '';
+            var options = { frequency: frequency, maximumAge: frequency, timeout: frequency};
 
             if(this.watchID) {
                 navigator.geolocation.clearWatch(this.watchID);
@@ -287,19 +284,18 @@ var datalogger = function() {
 
             var map_image = new Image();
             map_image.onload = function() {
-                $('#gps_loading').hide();
                 $('#map_canvas').html('<img style="border: 1px solid #000" src="' + url + '">');
-                $('#lat_long').html('<br>Latitude: ' + coords[0] + '<br>Longitude: ' + coords[1]);
+                $('#map_canvas').show();
             };
 
-            map_image.onerror = function(msg, file_loc, line_num) {
-                alert('Error Loading Image: ' + msg + ' ' + file_loc + ' ' + line_num);
-                console.log(msg);
-                $('#gps_loading').hide();
-                $('#lat_long').html('<br>Latitude: ' + coords[0] + '<br>Longitude: ' + coords[1]);
-                return false;
+            map_image.onerror = function() {
+                $('#map_canvas').hide();
             };
+
             map_image.src = url;
+            
+            $('#gps_loading').hide();
+            $('#lat_long').html('<br>Latitude: ' + coords[0] + '<br>Longitude: ' + coords[1]);
         },
         onGpsError: function() {
             console.log("GPS Error");
@@ -433,8 +429,7 @@ var datalogger = function() {
                     $('#gps-frequency').val('10').slider('refresh');
                 }
                 $('#gps_loading').show();
-                //$('#map_canvas').hide();
-                $('#map_canvas').html('');
+                $('#map_canvas').hide();
                 $('#lat_long').empty();
                 gpsView.plot();
             }
