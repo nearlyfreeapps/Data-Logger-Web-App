@@ -122,10 +122,17 @@ var datalogger = function() {
             this.add({ latitude: position.coords.latitude, longitude: position.coords.longitude, 
             altitude: position.coords.altitude, heading: position.coords.heading, speed: position.coords.speed  });
         },
-        getLastCoords: function() {
-            var coords = [];
-            coords.push(this.at(this.length-1).get("latitude"), this.at(this.length-1).get("longitude"));
-            return coords;
+        getLastLocation: function() {
+            var last = this.at(this.length-1)
+            var location = [last.get("latitude"), last.get("longitude"), last.get("altitude"), last.get("heading"), last.get("speed")];
+            
+            for (var i = 0; i < location.length; i++) {
+                if (location[i] == null) {
+                    location[i] = "N/A";
+                }
+            }
+            
+            return location;
         }
     });
 
@@ -279,8 +286,8 @@ var datalogger = function() {
         },
         onGpsSuccess: function(position) {
             gpsPoints.addLocation(position);
-            coords = gpsPoints.getLastCoords();
-            var url = "http://maps.google.com/maps/api/staticmap?center=" + coords[0] + "," + coords[1] + "&zoom=13&size=260x150&maptype=roadmap&markers=color:blue%7C" + coords[0] + "," + coords[1] + "&sensor=true";
+            var location = gpsPoints.getLastLocation();
+            var url = "http://maps.google.com/maps/api/staticmap?center=" + location[0] + "," + location[1] + "&zoom=13&size=260x150&maptype=roadmap&markers=color:blue%7C" + location[0] + "," + location[1] + "&sensor=true";
 
             var map_image = new Image();
             map_image.onload = function() {
@@ -293,9 +300,9 @@ var datalogger = function() {
             };
 
             map_image.src = url;
-            
+                        
             $('#gps_loading').hide();
-            $('#lat_long').html('<br>Latitude: ' + coords[0] + '<br>Longitude: ' + coords[1]);
+            $('#lat_long').html('<br>Latitude: ' + location[0] + '<br>Longitude: ' + location[1] + '<br>Altitude: ' + location[2] + '<br>Heading: ' + location[3] + '<br>Speed: ' + location[4]);
         },
         onGpsError: function() {
             console.log("GPS Error");
