@@ -297,7 +297,8 @@ var datalogger = function() {
                 alert('Error Loading Image: ' + msg);
                 $('#gps_loading').hide();
                 $('#lat_long').html('<br>Latitude: ' + coords[0] + '<br>Longitude: ' + coords[1]);
-            }
+                return false;
+            };
             map_image.src = url;
         },
         onGpsError: function() {
