@@ -288,13 +288,13 @@ var datalogger = function() {
             var map_image = new Image();
             map_image.onload = function() {
                 $('#gps_loading').hide();
-                $('#map_img').attr('src', url);
-                $('#map_canvas').show();
+                $('#map_canvas').html('<img style="border: 1px solid #000" src="' + url + '">');
                 $('#lat_long').html('<br>Latitude: ' + coords[0] + '<br>Longitude: ' + coords[1]);
             };
 
             map_image.onerror = function(msg, file_loc, line_num) {
-                alert('Error Loading Image: ' + msg);
+                alert('Error Loading Image: ' + msg + ' ' + file_loc + ' ' + line_num);
+                console.log(msg);
                 $('#gps_loading').hide();
                 $('#lat_long').html('<br>Latitude: ' + coords[0] + '<br>Longitude: ' + coords[1]);
                 return false;
@@ -433,7 +433,8 @@ var datalogger = function() {
                     $('#gps-frequency').val('10').slider('refresh');
                 }
                 $('#gps_loading').show();
-                $('#map_canvas').hide();
+                //$('#map_canvas').hide();
+                $('#map_canvas').html('');
                 $('#lat_long').empty();
                 gpsView.plot();
             }
