@@ -297,7 +297,7 @@ var datalogger = function() {
                 zoom: 15,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
-            
+            $('#map_canvas').show();
             var map = new google.maps.Map(document.getElementById("map_canvas"),
                 myOptions);
 
@@ -305,6 +305,7 @@ var datalogger = function() {
                 map: map,
                 position: coord
             });
+            alert('gps success');
             $('#lat_long').html('<br>Latitude: ' + coords[0] + '<br>Longitude: ' + coords[1]);
         },
         onGpsError: function() {
@@ -439,6 +440,8 @@ var datalogger = function() {
                     $('#gps-frequency').val('10').slider('refresh');
                 }
                 $('#gps_loading').show();
+                $('#map_canvas').hide();
+                $('#lat_long').empty();
                 gpsView.plot();
             }
         },
