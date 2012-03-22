@@ -30,7 +30,7 @@ var datalogger = function() {
             {
                 type: Backbone.HasOne,
                 key: 'schedule',
-                relatedModel: ScheduleModel,
+                relatedModel: ScheduleModel
             },
             {
                 type: Backbone.HasMany,
@@ -44,6 +44,43 @@ var datalogger = function() {
         ]
     });
     
+    var EntryModel = Backbone.RelationalModel.extend({
+        relations: [
+            {
+                type: Backbone.HasOne,
+                key: 'sensor',
+                relatedModel: SensorModel
+            }
+        ]
+    });
+
+    var EntryCollection = Backbone.Collection.extend({
+        model: EntryModel
+    });
+
+    var LogModel = Backbone.RelationalModel.extend({
+        defaults: {
+            start_date: '',
+            end_date: ''
+        },
+        relations: [
+            {
+                type: Backbone.HasOne,
+                key: 'template',
+                relatedModel: TemplateModel
+            },
+            {
+                type: Backbone.HasMany,
+                key: 'entries',
+                relatedModel: EntryModel,
+                collectionType: EntryCollection,
+                reverseRelation: {
+                    key: 'log'
+                }
+            }
+        ]
+    });
+
     var AccelPointModel = Backbone.Model.extend({
         defaults: {
             x: [0,0],
@@ -141,7 +178,13 @@ var datalogger = function() {
         localStorage: new Store("Templates")
     });
 
+    var LogCollection = Backbone.Collection.extend({
+        model: LogModel,
+        localStorage: new Store("Logs")
+    });
+
     var templates = new TemplateCollection();
+    var logs = new LogCollection();
 
     var TemplateListView = Backbone.View.extend({
         el: $('#template-list'),
