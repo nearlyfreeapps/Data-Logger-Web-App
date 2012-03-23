@@ -60,6 +60,7 @@ var datalogger = function() {
 
     var LogModel = Backbone.RelationalModel.extend({
         defaults: {
+            name: '',
             start_date: '',
             end_date: ''
         },
@@ -210,6 +211,49 @@ var datalogger = function() {
         add: function(model) {
             $(this.el).append(new TemplateItemView({ model: model }).render().el);
             $(this.el).listview('refresh');
+            return this;
+        },
+        remove: function(model) {
+            $(this.el).empty();
+            this.render();
+        }
+    });
+
+
+    var LogListView = Backbone.View.extend({
+        el: $('#log-list'),
+        initialize: function() {
+            this.model.bind('reset', this.render, this);
+            this.model.bind('add', this.add, this);
+            this.model.bind('remove', this.remove, this);
+            this.model.bind('change', this.change, this);
+        },
+        render: function(eventName) {
+            _.each(this.model.models, function(log) {
+                $(this.el).append(
+                    new LogItemView({model: log}).render().el);
+            }, this);
+            
+            try {
+                $(this.el).listview('refresh');
+            } catch(e) {
+                //..
+            }
+
+            return this;
+        },
+        change: function(eventName) {
+            $(this.el).empty();
+            this.render();
+        },
+        add: function(model) {
+            $(this.el).append(new LogItemView({ model: model }).render().el);
+            try {
+                $(this.el).listview('refresh');
+            } catch(e) {
+                //..
+            }
+
             return this;
         },
         remove: function(model) {
@@ -437,11 +481,13 @@ var datalogger = function() {
         el: $('#add-template'),
         initialize: function() {
             this.model = null;
+            this.log = null;
         },
         events: {
             'click #save-template': 'save_template',
             'click #add-template-back': 'back',
             'click #start-template': 'start_template',
+            'click #stop-template': 'stop_template',
             'change #schedule-switch': 'schedule_switch',
             'change #accelerometer-switch': 'accelerometer_switch',
             'change #gps-switch': 'gps_switch',
@@ -554,10 +600,28 @@ var datalogger = function() {
             this.model.destroy();
             $.mobile.changePage($('#settings'), { transition: 'none', reverse: true, changeHash: true });
         },
+        performLogging: function() {
+            var date = new Date();
+            this.log = logs.create({name: this.model.get('name'), start_date: date.toLocaleString(), template: this.model, end_date: 'N/A' });
+            this.log.save();
+        },
         start_template: function(event) {
-            alert('Start the logging session...');
+            event.preventDefault();
+            this.performLogging();
+            $('#start-template').hide();
+            $('#stop-template').show();
+        },
+        stop_template: function(event) {
+            event.preventDefault();
+            var date = new Date();
+            this.log.set({ end_date: date.toLocaleString() });
+            this.log.save();
+            this.log = null;
+            $('#stop-template').hide();
+            $('#start-template').show();
         },
         save_template: function(event) {
+            event.preventDefault();
             if($('#template-name').val() == '') {
                 alert('Enter a template name before saving');
             } else {
@@ -662,6 +726,7 @@ var datalogger = function() {
 
 
     var templateListView = new TemplateListView({ model: templates });
+    var logListView = new LogListView({ model: logs });
     var addTemplateView = new AddTemplateView();
 
     var TemplateItemView = Backbone.View.extend({
@@ -681,9 +746,25 @@ var datalogger = function() {
         }
     });
 
+    var LogItemView = Backbone.View.extend({
+        tagName: 'li',
+        events: {
+            'click a': 'log_click'
+        },
+        template: _.template($('#log-list-item').html()),
+        log_click: function(event) {
+            event.preventDefault();
+        },
+        render: function(eventName) {
+            $(this.el).html(this.template(this.model.toJSON()));
+            return this;
+        }
+    });
+
     var scheduleView = new ScheduleView();
     var repeatView = new RepeatView();
     templates.fetch();
+    logs.fetch();
 
     var Router = Backbone.Router.extend({
         routes: {
@@ -705,6 +786,8 @@ var datalogger = function() {
         logs: function() {
             $.mobile.changePage($('#logs'), { transition: 'none', reverse: false, changeHash: false });
             $('.ui-btn-active').removeClass('ui-btn-active');
+            $('#logs-list').listview('refresh');
+
         },
         add_template: function() {
             $.mobile.changePage($('#add-template'), { transition: 'none', reverse: false, changeHash: false });
