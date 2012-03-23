@@ -57,7 +57,9 @@ Exporter.prototype.buildXML = function() {
     xw.writeEndElement();
     xw.writeEndDocument();
     
-    return xw.flush();
+    var data = xw.flush();
+    xw.close();
+    return data;
 }
 
 Exporter.prototype.buildCSV = function(delimiter) {
