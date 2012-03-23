@@ -197,7 +197,7 @@ var datalogger = function() {
         },
         render: function(eventName) {
             _.each(this.model.models, function(template) {
-                $(this.el).append(
+                $(this.el).prepend(
                     new TemplateItemView({model: template}).render().el);
             }, this);
             
@@ -209,9 +209,8 @@ var datalogger = function() {
             this.render();
         },
         add: function(model) {
-            $(this.el).append(new TemplateItemView({ model: model }).render().el);
+            $(this.el).prepend(new TemplateItemView({ model: model }).render().el);
             $(this.el).listview('refresh');
-            return this;
         },
         remove: function(model) {
             $(this.el).empty();
@@ -230,7 +229,7 @@ var datalogger = function() {
         },
         render: function(eventName) {
             _.each(this.model.models, function(log) {
-                $(this.el).append(
+                $(this.el).prepend(
                     new LogItemView({model: log}).render().el);
             }, this);
             
@@ -247,7 +246,7 @@ var datalogger = function() {
             this.render();
         },
         add: function(model) {
-            $(this.el).append(new LogItemView({ model: model }).render().el);
+            $(this.el).prepend(new LogItemView({ model: model }).render().el);
             try {
                 $(this.el).listview('refresh');
             } catch(e) {
