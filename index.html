@@ -94,15 +94,21 @@
             </div>
             </li>
             <li id="schedule-block" class="tall-list" style="display: none;">
-                <a href="#schedule-template" id="scheduling"><div style="float:left;">
-                    Starts<br><br>
-                    Ends<br><br>
-                    Repeats<br><br>
-                </div>
-                <div style="float: right;text-align: right;margin-right: 25px;">
-                    <div id="start-date-time">N/A</div><br>
-                    <div id="end-date-time">N/A</div><br>
-                    <div style="text-transform:capitalize;" id="repeats">None</div><br>
+                <a href="#schedule-template" id="scheduling"><div style="float:left;width:100%;">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="text-align: left;width:50%;">Starts</td>
+                            <td id="start-date-time" style="text-align: right;width:50%;padding-right:15px;">N/A</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;width:50%;">Ends</td>
+                            <td id="end-date-time" style="text-align: right;width:50%;padding-right:15px;">N/A</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;width:50%;">Repeats</td>
+                            <td id="repeats" style="text-align: right;text-transform:capitalize;width:50%;padding-right:15px;">None</td>
+                        </tr>
+                    </table>
                 </div>
                 </a>
             </li>
@@ -310,7 +316,7 @@
     <div data-role="content">
         <ul id="log-list" data-role="listview">
             <script type="text/template" id="log-list-item">
-                <a href="#log"><%= name %><br><div style="color: #777;font-size: 13px;"><%= start_date %> - <%= end_date %></div></a>
+                <a href="#log"><%= name %><br><div style="color: #777;font-size: 12px;">Start: <%= start_date %><br>End: <%= end_date %></div></a>
             </script>
         </ul>
     </div>

@@ -296,6 +296,7 @@ var datalogger = function() {
             accelPoints.reset();
         },
         frequency_change: function(event) {
+            $('#stop-template').hide();
             $('#start-template').hide();
             $('#save-template').show();
 
@@ -347,6 +348,7 @@ var datalogger = function() {
             gpsPoints.reset();
         },
         frequency_change: function(event) {
+            $('#stop-template').hide();
             $('#start-template').hide();
             $('#save-template').show();
             
@@ -408,6 +410,7 @@ var datalogger = function() {
             $.mobile.changePage($('#add-template'), { transition: 'none', reverse: true, changeHash: false });
         },
         show_save: function(event) {
+            $('#stop-template').hide();
             $('#start-template').hide();
             $('#save-template').show();
         }
@@ -431,42 +434,49 @@ var datalogger = function() {
         monday: function(event) {
             event.preventDefault();
             $('#mon-check').toggle().toggleClass('selected');
+            $('#stop-template').hide();
             $('#start-template').hide();
             $('#save-template').show();
         },
         tuesday: function(event) {
             event.preventDefault();
             $('#tue-check').toggle().toggleClass('selected');
+            $('#stop-template').hide();            
             $('#start-template').hide();
             $('#save-template').show();
         },
         wednesday: function(event) {
             event.preventDefault();
             $('#wed-check').toggle().toggleClass('selected');
+            $('#stop-template').hide();            
             $('#start-template').hide();
             $('#save-template').show();
         },
         thursday: function(event) {
             event.preventDefault();
             $('#thu-check').toggle().toggleClass('selected');
+            $('#stop-template').hide();            
             $('#start-template').hide();
             $('#save-template').show();
         },
         friday: function(event) {
             event.preventDefault();
             $('#fri-check').toggle().toggleClass('selected');
+            $('#stop-template').hide();         
             $('#start-template').hide();
             $('#save-template').show();
         },
         saturday: function(event) {
             event.preventDefault();
             $('#sat-check').toggle().toggleClass('selected');
+            $('#stop-template').hide();
             $('#start-template').hide();
             $('#save-template').show();
         },
         sunday: function(event) {
             event.preventDefault();
             $('#sun-check').toggle().toggleClass('selected');
+            $('#stop-template').hide();
             $('#start-template').hide();
             $('#save-template').show();
         }
@@ -586,6 +596,7 @@ var datalogger = function() {
             
                 $('#delete-list').show();
                 $('#delete-confirm-block').hide();
+                $('#stop-template').hide();
                 $('#save-template').hide();
                 $('#start-template').show();
             }
@@ -684,6 +695,7 @@ var datalogger = function() {
                 
                 $('#delete-list').show();
                 $('#delete-confirm-block').hide();
+                $('#stop-template').hide();
                 $('#save-template').hide();
                 $('#start-template').show();
             }
@@ -695,10 +707,12 @@ var datalogger = function() {
         },
         schedule_switch: function(event) {
             if($('#schedule-switch').val() == 'on') {
+                $('#stop-template').hide();
                 $('#start-template').hide();
                 $('#save-template').show();
                 $('#schedule-block').show();
             } else {
+                $('#stop-template').hide();
                 $('#save-template').show();
                 $('#schedule-block').hide();
                 $('#start-template').hide();
@@ -706,15 +720,18 @@ var datalogger = function() {
         },
         accelerometer_switch: function(event) {
             event.preventDefault();
+            $('#stop-template').hide();
             $('#start-template').hide();
             $('#save-template').show();
         },
         gps_switch: function(event) {
             event.preventDefault();
+            $('#stop-template').hide();
             $('#start-template').hide();
             $('#save-template').show();
         },
         template_name: function(event) {
+            $('#stop-template').hide();
             $('#start-template').hide();
             $('#save-template').show();
         },
