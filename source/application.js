@@ -581,6 +581,11 @@ var datalogger = function() {
                         $('#' + element + '-check').show().addClass('selected');
                         repeat_string = repeat_string + ' ' + element;
                     });
+
+                    if(repeat_string.length > 16) {
+                        repeat_string = repeat_string.substring(0, 16) + '...';
+                    }
+
                     $('#repeats').text(repeat_string);
 
                     if($.trim($('#start-date-time').text()) == '') {
