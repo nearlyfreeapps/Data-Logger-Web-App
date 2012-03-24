@@ -363,7 +363,7 @@ var datalogger = function() {
         },
         plot: function() {
             var frequency = 1000 / $('#gps-frequency').val();
-            var options = { frequency: frequency, maximumAge: frequency, timeout: frequency};
+            var options = { enableHighAccuracy: true, frequency: frequency, maximumAge: frequency, timeout: frequency};
 
             if(this.watchID) {
                 navigator.geolocation.clearWatch(this.watchID);
