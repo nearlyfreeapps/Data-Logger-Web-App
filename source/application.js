@@ -755,14 +755,14 @@ var datalogger = function() {
         events: {
             'click a': 'template_click'
         },
-        template: _.template($('#template-list-item').html()),
+        template: $('#template-list-item').html(),
         template_click: function(event) {
             event.preventDefault();
             $.mobile.changePage($('#add-template'), { transition: 'none', reverse: false, changeHash: false });
             addTemplateView.init(this.model);
         },
         render: function(eventName) {
-            $(this.el).html(this.template(this.model.toJSON()));
+            $(this.el).html(Mustache.to_html(this.template, this.model.toJSON()));
             return this;
         }
     });
@@ -772,12 +772,12 @@ var datalogger = function() {
         events: {
             'click a': 'log_click'
         },
-        template: _.template($('#log-list-item').html()),
+        template: $('#log-list-item').html(),
         log_click: function(event) {
             event.preventDefault();
         },
         render: function(eventName) {
-            $(this.el).html(this.template(this.model.toJSON()));
+            $(this.el).html(Mustache.to_html(this.template, this.model.toJSON()));
             return this;
         }
     });
@@ -833,6 +833,10 @@ var datalogger = function() {
 
 
 $(function() {
+    _.templateSettings = {
+        interpolate : /\{\{([\s\S]+?)\}\}/g
+    };
+    
     datalogger();
 });
 

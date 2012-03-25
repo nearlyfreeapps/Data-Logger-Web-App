@@ -24,14 +24,12 @@
             $.mobile.pushStateEnabled = false;
         });
     </script>
-    <script type="text/javascript"
-      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBcLqMKiCK8ik3mT7uA0pxTkz_7mm3uDts&sensor=true">
-    </script>
 	<script src="assets/js/libs/jquery.mobile-1.1.0.min.js"></script>
     <script src="assets/js/libs/jquery.mobile.datebox-1.0.1.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
     <script src="assets/js/libs/jquery.flot.js"></script>
     <script src="assets/js/libs/XMLWriter-1.0.0.js"></script>
+    <script src="assets/js/libs/mustache.js"></script>
     <script src="source/export.js"></script>
     <script src="source/application.js"></script>
 
@@ -48,7 +46,7 @@
     <div data-role="content">
         <ul id="template-list" data-role="listview">
             <script type="text/template" id="template-list-item">
-                <a href="#template"><%= name %></a>
+                <a href="#template">{{ name }}</a>
             </script>
         </ul>
     </div>
@@ -316,7 +314,7 @@
     <div data-role="content">
         <ul id="log-list" data-role="listview">
             <script type="text/template" id="log-list-item">
-                <a href="#log"><%= name %><br><div style="color: #777;font-size: 12px;">Start: <%= start_date %><br>End: <%= end_date %></div></a>
+                <a href="#log">{{ template.name }}<br><div style="color: #777;font-size: 12px;">Start: {{ start_date }}<br>End: {{ end_date }}</div></a>
             </script>
         </ul>
     </div>
