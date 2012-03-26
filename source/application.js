@@ -64,7 +64,8 @@ var datalogger = function() {
             delimiter: '',
             decimal_places: 0,
             name: '',
-            path : ''
+            path: '',
+            date: ''
         }
     });
 
@@ -270,6 +271,44 @@ var datalogger = function() {
         },
         add: function(model) {
             $(this.el).prepend(new LogItemView({ model: model }).render().el);
+            try {
+                $(this.el).listview('refresh');
+            } catch(e) {
+                //..
+            }
+
+            return this;
+        },
+        remove: function(model) {
+            $(this.el).empty();
+            this.render();
+        }
+    });
+
+    var FileListView = Backbone.View.extend({
+        el: $('#log-details-files'),
+        initialize: function() {
+            this.model.bind('reset', this.render, this);
+            this.model.bind('add', this.add, this);
+            this.model.bind('remove', this.remove, this);
+        },
+        render: function(eventName) {
+            $(this.el).empty();
+            _.each(this.model.models, function(file) {
+                $(this.el).prepend(
+                    new FileItemView({model: file}).render().el);
+            }, this);
+            
+            try {
+                $(this.el).listview('refresh');
+            } catch(e) {
+                //..
+            }
+
+            return this;
+        },
+        add: function(model) {
+            $(this.el).prepend(new FileItemView({ model: model }).render().el);
             try {
                 $(this.el).listview('refresh');
             } catch(e) {
@@ -817,9 +856,14 @@ var datalogger = function() {
         init: function(model) {
             this.model = model;
             $('#delete-log-confirm-block').hide();
+            $('#log-details-files').empty();
             $("input[type='radio']").removeAttr('checked').checkboxradio("refresh");
             $('#format-choice-1').attr('checked', 'checked').checkboxradio('refresh');
 	        $('#delim-choice-1').attr('checked', 'checked').checkboxradio('refresh');
+
+            this.logFileView = new FileListView({ model: this.model.get('files')});
+            this.logFileView.render();
+
             $('#log-details-list').html(Mustache.to_html(this.sensor_template, this.model.get('template').toJSON()));
             $('#log-details-list').listview('refresh');
         },
@@ -833,11 +877,18 @@ var datalogger = function() {
             $.mobile.changePage($('#logs'), { transition: 'none', reverse: true, changeHash: false });
         },
         back: function(event) {
-            event.preventDefault();
+            event.preventDefault()
+            this.logFileView.model.off();
+            this.logFileView.undelegateEvents();
+            this.logFileView.remove();
+            this.logFileView = null;
             $.mobile.changePage($('#logs'), { transition: 'none', reverse: false, changeHash: false });
         },
         export_log: function(event) {
             event.preventDefault();
+
+            this.model.get('files').add({name: this.model.get('template').get('name')});
+            this.model.save();
         }
     })
 
@@ -854,6 +905,15 @@ var datalogger = function() {
             $.mobile.changePage($('#log-details'), { transition: 'none', reverse: false, changeHash: false });
             logDetailsView.init(this.model);
         },
+        render: function(eventName) {
+            $(this.el).html(Mustache.to_html(this.template, this.model.toJSON()));
+            return this;
+        }
+    });
+
+    var FileItemView = Backbone.View.extend({
+        tagName: 'li',
+        template: $('#log-details-file-item').html(),
         render: function(eventName) {
             $(this.el).html(Mustache.to_html(this.template, this.model.toJSON()));
             return this;
