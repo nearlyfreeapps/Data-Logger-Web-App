@@ -144,16 +144,6 @@
         </ul>
 
     </div>
-    
-
-    <!--<div class="tabbar" data-id="bottom-footer" data-role="footer" data-tap-toggle="false" data-position="fixed">
-        <div class="tabbar" data-role="navbar">
-            <ul>
-                <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
-                <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
-            </ul>
-        </div>
-    </div>--!>
 </div>
 
 <!-- Accelerometer View -->
@@ -166,7 +156,7 @@
     <div data-role="content">
         <div id="sensor-title">Log Settings</div>
         <ul data-role="listview" data-inset="true">
-            <li class="tall-list">Frequency<div style="float:right;">Hz</a></li>
+            <li class="tall-list">Frequency<div style="float:right;">Hz</div></li>
         </ul>
 
         <div style="min-height: 30px;" data-role="fieldcontain">
@@ -183,15 +173,6 @@
             </li>
         </ul>
     </div>
-
-    <!--<div class="tabbar" data-id="bottom-footer"  data-tap-toggle="false" data-role="footer" data-position="fixed">
-        <div class="tabbar" data-role="navbar">
-            <ul>
-                <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
-                <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
-            </ul>
-        </div>
-    </div>--!>
 </div>
 
 <!-- GPS View -->
@@ -204,7 +185,7 @@
     <div data-role="content">
         <div id="sensor-title">Log Settings</div>
         <ul data-role="listview" data-inset="true">
-            <li class="tall-list">Frequency<div style="float:right;">Hz</a></li>
+            <li class="tall-list">Frequency<div style="float:right;">Hz</div></li>
         </ul>
 
         <div style="min-height: 30px;" data-role="fieldcontain">
@@ -225,15 +206,6 @@
             </li>
         </ul>
     </div>
-
-    <!--<div class="tabbar" data-id="bottom-footer"  data-tap-toggle="false" data-role="footer" data-position="fixed">
-        <div class="tabbar" data-role="navbar">
-            <ul>
-                <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
-                <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
-            </ul>
-        </div>
-    </div>--!>
 </div>
 
 <!-- Schedule Screen -->
@@ -264,14 +236,6 @@
             <li class="tall-list"><a href="#repeat-template" id="repeat">Repeat</a></li>
         </ul>
     </div>
-    <!--<div class="tabbar" data-id="bottom-footer" data-role="footer" data-position="fixed">
-        <div class="tabbar" data-role="navbar">
-            <ul>
-                <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
-                <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
-            </ul>
-        </div>
-    </div>--!>
 </div>
 
 <!-- Repeat Screen -->
@@ -292,15 +256,6 @@
             <li class="tall-list repeat" id="repeat-sun" data-icon="false"><a href="#">Sunday<div class="day-check" id="sun-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
         </ul>
     </div>
-
-    <!--<div class="tabbar"  data-tap-toggle="false" data-id="bottom-footer" data-role="footer" data-position="fixed">
-        <div class="tabbar" data-role="navbar">
-            <ul>
-                <li><a href="#settings" id="settings-icon" data-icon="custom" data-transition="none">Settings</a></li>
-                <li><a href="#logs" id="logs-icon" data-icon="custom" data-transition="none">Logs</a></li>
-            </ul>
-        </div>
-    </div>--!>
 </div>
 
 
@@ -308,7 +263,6 @@
 <div id="logs" data-role="page">
 	<div data-role="header"  data-tap-toggle="false" data-position="fixed">
 		<h1>Logs</h1>
-        <a href="#" data-icon="custom" id="export-icon" class="ui-btn-right">Export</a>
 	</div>
     
     <div data-role="content">
@@ -329,6 +283,76 @@
     </div>
 </div>
 
+<!-- Log Details Screen -->
+<div id="log-details" data-role="page">
+	<div data-role="header"  data-tap-toggle="false" data-position="fixed">
+        <a href="#" id="log-details-back" data-icon="back">Back</a>
+		<h1>Log Details</h1>
+        <a href="#" data-icon="custom" id="export-icon" class="ui-btn-right">Export</a>
+	</div>
+    
+    <div data-role="content">
+        <div id="sensor-title">Template Settings</div>
+        <ul id="log-details-list" data-role="listview" data-inset="true">
+            <script type="text/template" id="log-details-sensor">
+                <li>Template Used: {{ name }}</li>
+                {{#sensors}}
+                    <li>{{ name }}<br><div style="color: #777;font-size: 12px;">State: {{ state }}</div><div style="color: #777;font-size: 12px;">Frequency: {{ frequency }}Hz</div></li>
+                {{/sensors}}
+            </script>
+        </ul>
+
+        
+        <div id="sensor-title">Export Options</div>
+        <ul id="log-details-export" data-role="listview" data-inset="true">
+            <li>File Format<br>
+            <div data-role="fieldcontain">
+                <fieldset data-role="controlgroup" data-type="horizontal">
+                    <input type="radio" name="format-choice-1" id="format-choice-1" value="csv" checked="checked" />
+                    <label for="format-choice-1">CSV</label>
+                    <input type="radio" name="format-choice-1" id="format-choice-2" value="xml"  />
+         	        <label for="format-choice-2">XML</label>
+                </fieldset>
+            </div>
+            </li>
+            <li>File Delimiter<br>
+            <div data-role="fieldcontain">
+                <fieldset data-role="controlgroup" data-type="horizontal">
+                    <input type="radio" name="delim-choice-2" id="delim-choice-1" value="comma" checked="checked" />
+                    <label for="delim-choice-1">Comma</label>
+                    <input type="radio" name="delim-choice-2" id="delim-choice-2" value="space"  />
+         	        <label for="delim-choice-2">Space</label>
+                    <input type="radio" name="delim-choice-2" id="delim-choice-3" value="tab"  />
+         	        <label for="delim-choice-3">Tab</label>
+                </fieldset>
+            </div>
+
+            </li>
+        </ul>
+
+        <ul data-role="listview" data-inset="true">
+            <li class="tall-list">Decimal Place Accuracy<br>
+                    <div style="min-height: 30px;" data-role="fieldcontain">
+            <input type="range" id="decimal-places" name="slider" id="slider-fill" value="2" min="0" max="5" data-highlight="true" />
+        </div>
+
+            </li>
+        </ul>
+
+
+
+
+        <ul id="delete-log-list" data-role="listview" data-inset="true">
+            <li>
+                 <button data-role="button" id="delete-log" data-icon="delete">Delete Log</button>
+            </li>
+            <li id="delete-log-confirm-block" style="display: none;">Press 'Confirm' to delete the log. This action is not reversible.<br>
+             <button data-role="button" id="delete-log-confirm" data-icon="check" data-theme="b">Confirm</button>
+            </li>
+        </ul>
+
+    </div>
+</div>
 </body>
 </html>
 

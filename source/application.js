@@ -13,7 +13,7 @@ var datalogger = function() {
     var SensorModel = Backbone.RelationalModel.extend({
         defaults: {
             name: '',
-            on: false,
+            state: 'off',
             frequency: 0
         }
     });
@@ -58,6 +58,20 @@ var datalogger = function() {
         model: EntryModel
     });
 
+    var FileModel = Backbone.RelationalModel.extend({
+        defaults: {
+            format: '',
+            delimiter: '',
+            decimal_places: 0,
+            name: '',
+            path : ''
+        }
+    });
+
+    var FileCollection = Backbone.Collection.extend({
+        model: FileModel
+    });
+
     var LogModel = Backbone.RelationalModel.extend({
         defaults: {
             name: '',
@@ -75,6 +89,15 @@ var datalogger = function() {
                 key: 'entries',
                 relatedModel: EntryModel,
                 collectionType: EntryCollection,
+                reverseRelation: {
+                    key: 'log'
+                }
+            },
+            {
+                type: Backbone.HasMany,
+                key: 'files',
+                relatedModel: FileModel,
+                collectionType: FileCollection,
                 reverseRelation: {
                     key: 'log'
                 }
@@ -620,7 +643,7 @@ var datalogger = function() {
         },
         performLogging: function() {
             var date = new Date();
-            this.log = logs.create({name: this.model.get('name'), start_date: date.toLocaleString(), template: this.model, end_date: 'N/A' });
+            this.log = logs.create({name: this.model.get('name'), start_date: date.toLocaleString(), template: { name: this.model.get('name'), sensors: [{ name: this.model.get('sensors').at(0).get('name'), state: this.model.get('sensors').at(0).get('state'), frequency: this.model.get('sensors').at(0).get('frequency')}, { name: this.model.get('sensors').at(1).get('name'), state: this.model.get('sensors').at(1).get('state'), frequency: this.model.get('sensors').at(1).get('frequency')} ], end_date: 'N/A' }});
             this.log.save();
         },
         start_template: function(event) {
@@ -661,12 +684,12 @@ var datalogger = function() {
                     });
 
                     template.get('sensors').add([
-                        { name: 'accelerometer', state: $('#accelerometer-switch').val(),
+                        { name: 'Accelerometer', state: $('#accelerometer-switch').val(),
                         frequency: $('#accelerometer-frequency').val() }
                     ]);
 
                     template.get('sensors').add([
-                        { name: 'gps', state: $('#gps-switch').val(),
+                        { name: 'GPS', state: $('#gps-switch').val(),
                             frequency: $('#gps-frequency').val() }
                     ]);
                  
@@ -782,6 +805,44 @@ var datalogger = function() {
         }
     });
 
+    var LogDetailsView = Backbone.View.extend({
+        el: $('#log-details'),
+        events: {
+            'click #log-details-back': 'back',
+            'click #export-icon': 'export_log',
+            'click #delete-log': 'delete_log',
+            'click #delete-log-confirm': 'delete_log_confirm'
+        },
+        sensor_template: $('#log-details-sensor').html(),
+        init: function(model) {
+            this.model = model;
+            $('#delete-log-confirm-block').hide();
+            $("input[type='radio']").removeAttr('checked').checkboxradio("refresh");
+            $('#format-choice-1').attr('checked', 'checked').checkboxradio('refresh');
+	        $('#delim-choice-1').attr('checked', 'checked').checkboxradio('refresh');
+            $('#log-details-list').html(Mustache.to_html(this.sensor_template, this.model.get('template').toJSON()));
+            $('#log-details-list').listview('refresh');
+        },
+        delete_log: function(event) {
+            event.preventDefault();
+            $('#delete-log-confirm-block').toggle();
+        },
+        delete_log_confirm: function(event) {
+            event.preventDefault();
+            this.model.destroy();
+            $.mobile.changePage($('#logs'), { transition: 'none', reverse: true, changeHash: false });
+        },
+        back: function(event) {
+            event.preventDefault();
+            $.mobile.changePage($('#logs'), { transition: 'none', reverse: false, changeHash: false });
+        },
+        export_log: function(event) {
+            event.preventDefault();
+        }
+    })
+
+    var logDetailsView = new LogDetailsView();
+
     var LogItemView = Backbone.View.extend({
         tagName: 'li',
         events: {
@@ -790,6 +851,8 @@ var datalogger = function() {
         template: $('#log-list-item').html(),
         log_click: function(event) {
             event.preventDefault();
+            $.mobile.changePage($('#log-details'), { transition: 'none', reverse: false, changeHash: false });
+            logDetailsView.init(this.model);
         },
         render: function(eventName) {
             $(this.el).html(Mustache.to_html(this.template, this.model.toJSON()));
