@@ -606,17 +606,6 @@ var datalogger = function() {
                     this.accelWatchID = null;
                 }
 
-                var accel_error = function() {
-                    console.log('Accelerometer Error');
-                }
-
-                var accel_success = function(acceleration) {
-                    var date = new Date();
-                    console.log('adding accelerometer log entry');
-                    this.log.get('entries').create({ sensor: this.model.get('sensors').at(0), timestamp: date.toLocaleString(), x: acceleration.x, y: acceleration.y, z: acceleration.z  });
-                    this.log.save();
-                }
-
                 this.accelWatchID = navigator.accelerometer.watchAcceleration(accel_success, accel_error, options);
             }
 
@@ -630,19 +619,26 @@ var datalogger = function() {
                     this.GPSWatchID = null;
                 }
                 
-                var gps_error = function() {
-                    console.log('GPS Error');
-                }
-
-                var gps_success = function(position) {
-                    var date = new Date();
-                    console.log('adding gps log entry');
-                    this.log.get('entries').create({ sensor: this.model.get('sensors').at(1), timestamp: date.toLocaleString(), latitude: position.latitude, longitude: position.longitude, altitude: position.altitude  });
-                    this.log.save();
-                }
-
-                this.GPSWatchID = navigator.geolocation.watchPosition(gps_success, gps_error, options);
+                this.GPSWatchID = navigator.geolocation.watchPosition(this.gps_success, this.gps_error, options);
             }
+        },
+        accel_error = function() {
+            console.log('Accelerometer Error');
+        },
+        accel_success = function(acceleration) {
+            var date = new Date();
+            console.log('adding accelerometer log entry');
+            this.log.get('entries').add({ sensor: this.model.get('sensors').at(0), timestamp: date.toLocaleString(), x: acceleration.x, y: acceleration.y, z: acceleration.z  });
+            this.log.save();
+        },
+        gps_error = function() {
+            console.log('GPS Error');
+        },
+        gps_success = function(position) {
+            var date = new Date();
+            console.log('adding gps log entry');
+            this.log.get('entries').add({ sensor: this.model.get('sensors').at(1), timestamp: date.toLocaleString(), latitude: position.latitude, longitude: position.longitude, altitude: position.altitude  });
+            this.log.save();
         },
         start_template: function(event) {
             event.preventDefault();
@@ -672,10 +668,9 @@ var datalogger = function() {
             }
 
             if(this.accelWatchID) {
-                navigator.geolocation.clearWatch(this.accelWatchID);
+                navigator.accelerometer.clearWatch(this.accelWatchID);
                 this.accelWatchID = null;
             }
-
 
             $('#template-name').textinput('enable');
             $('#schedule-switch').slider('enable');
