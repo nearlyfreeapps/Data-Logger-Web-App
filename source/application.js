@@ -606,7 +606,7 @@ var datalogger = function() {
                     this.accelWatchID = null;
                 }
 
-                this.accelWatchID = navigator.accelerometer.watchAcceleration(accel_success, accel_error, options);
+                this.accelWatchID = navigator.accelerometer.watchAcceleration(this.accel_success, this.accel_error, options);
             }
 
             if(this.model.get('sensors').at(1).get('state') === 'on') {
@@ -658,7 +658,7 @@ var datalogger = function() {
             this.log.set({ end_date: date.toLocaleString() });
             this.log.save();
 
-            console.log(this.log.get('entries').toJSON());
+            console.log(this.log.toJSON());
 
             this.log = null;
             
