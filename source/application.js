@@ -598,6 +598,26 @@ var datalogger = function() {
 
             if(this.model.get('sensors').at(0).get('state') === 'on') {
                 // Start Accelerometer
+                var frequency = 1000 / this.model.get('sensors').at(0).get('frequency');
+                var options = { frequency: frequency};
+
+                if(this.accelWatchID) {
+                    navigator.accelerometer.clearWatch(this.accelWatchID);
+                    this.accelWatchID = null;
+                }
+
+                var accel_error = function() {
+                    console.log('Accelerometer Error');
+                }
+
+                var accel_success = function(acceleration) {
+                    var date = new Date();
+                    console.log('adding accelerometer log entry');
+                    this.log.get('entries').create({ sensor: this.model.get('sensors').at(0), timestamp: date.toLocaleString(), x: acceleration.x, y: acceleration.y, z: acceleration.z  });
+                    this.log.save();
+                }
+
+                this.accelWatchID = navigator.accelerometer.watchAcceleration(accel_success, accel_error, options);
             }
 
             if(this.model.get('sensors').at(1).get('state') === 'on') {
@@ -641,12 +661,21 @@ var datalogger = function() {
             var date = new Date();
             this.log.set({ end_date: date.toLocaleString() });
             this.log.save();
+
+            console.log(this.log.get('entries').toJSON());
+
             this.log = null;
             
             if(this.GPSWatchID) {
-                navigator.geolocation.clearWatch(this.watchID);
+                navigator.geolocation.clearWatch(this.GPSWatchID);
                 this.GPSWatchID = null;
             }
+
+            if(this.accelWatchID) {
+                navigator.geolocation.clearWatch(this.accelWatchID);
+                this.accelWatchID = null;
+            }
+
 
             $('#template-name').textinput('enable');
             $('#schedule-switch').slider('enable');
