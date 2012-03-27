@@ -2,11 +2,8 @@ var datalogger = function() {
     
     var ScheduleModel = Backbone.RelationalModel.extend({
         defaults: {
-            start_date: '',
-            start_time: '',
             end_date: '',
-            end_time: '',
-            repeat: []
+            end_time: ''
         }
     });
 
@@ -299,6 +296,10 @@ var datalogger = function() {
                     new FileItemView({model: file}).render().el);
             }, this);
             
+            if(this.model.length === 0) {
+                $(this.el).prepend('<li>No Exported Files</li>');
+            }
+
             try {
                 $(this.el).listview('refresh');
             } catch(e) {
@@ -308,6 +309,11 @@ var datalogger = function() {
             return this;
         },
         add: function(model) {
+
+            if(this.model.length === 1) {
+                $(this.el).empty();
+            }
+
             $(this.el).prepend(new FileItemView({ model: model }).render().el);
             try {
                 $(this.el).listview('refresh');
@@ -463,8 +469,6 @@ var datalogger = function() {
         el: $('#schedule-template'),
         events: {
             'click #schedule-template-back': 'back',
-            'change #start-date': 'show_save',
-            'change #start-time': 'show_save',
             'change #end-date': 'show_save',
             'change #end-time': 'show_save'
         },
@@ -476,73 +480,6 @@ var datalogger = function() {
             $('#start-template').hide();
             $('#save-template').show();
         }
-    });
-
-    var RepeatView = Backbone.View.extend({
-        el: $('#repeat-template'),
-        events: {
-            'click #repeat-template-back': 'back',
-            'click #repeat-mon': 'monday',
-            'click #repeat-tue': 'tuesday',
-            'click #repeat-wed': 'wednesday',
-            'click #repeat-thu': 'thursday',
-            'click #repeat-fri': 'friday',
-            'click #repeat-sat': 'saturday',
-            'click #repeat-sun': 'sunday'
-        },
-        back: function(event) {
-            $.mobile.changePage($('#schedule-template'), { transition: 'none', reverse: true, changeHash: false });
-        },
-        monday: function(event) {
-            event.preventDefault();
-            $('#mon-check').toggle().toggleClass('selected');
-            $('#stop-template').hide();
-            $('#start-template').hide();
-            $('#save-template').show();
-        },
-        tuesday: function(event) {
-            event.preventDefault();
-            $('#tue-check').toggle().toggleClass('selected');
-            $('#stop-template').hide();            
-            $('#start-template').hide();
-            $('#save-template').show();
-        },
-        wednesday: function(event) {
-            event.preventDefault();
-            $('#wed-check').toggle().toggleClass('selected');
-            $('#stop-template').hide();            
-            $('#start-template').hide();
-            $('#save-template').show();
-        },
-        thursday: function(event) {
-            event.preventDefault();
-            $('#thu-check').toggle().toggleClass('selected');
-            $('#stop-template').hide();            
-            $('#start-template').hide();
-            $('#save-template').show();
-        },
-        friday: function(event) {
-            event.preventDefault();
-            $('#fri-check').toggle().toggleClass('selected');
-            $('#stop-template').hide();         
-            $('#start-template').hide();
-            $('#save-template').show();
-        },
-        saturday: function(event) {
-            event.preventDefault();
-            $('#sat-check').toggle().toggleClass('selected');
-            $('#stop-template').hide();
-            $('#start-template').hide();
-            $('#save-template').show();
-        },
-        sunday: function(event) {
-            event.preventDefault();
-            $('#sun-check').toggle().toggleClass('selected');
-            $('#stop-template').hide();
-            $('#start-template').hide();
-            $('#save-template').show();
-        }
-
     });
 
     var accelerometerView = new AccelerometerView();
@@ -604,16 +541,10 @@ var datalogger = function() {
         init: function(model) {
             this.model = model;
 
-            $('#start-date').val('');
-            $('#start-time').val('');
+
             $('#end-date').val('');
             $('#end-time').val('');
-            $('.day-check').each(function(index, element) {
-                $(element).hide().removeClass('selected');
-            });
-            $('#start-date-time').text('N/A');
             $('#end-date-time').text('N/A');
-            $('#repeats').text('None');
             if(this.model === null) {
                 //Configure Empty Add Template View
                 $('#template-name').val('');
@@ -631,34 +562,14 @@ var datalogger = function() {
                     //.. show schedule
                     $('#schedule-switch').val('on').slider('refresh');
                     $('#schedule-block').show();
-                    
-                    $('#start-date').val(this.model.get('schedule').get('start_date'));
-                    $('#start-time').val(this.model.get('schedule').get('start_time'));
                     $('#end-date').val(this.model.get('schedule').get('end_date'));
                     $('#end-time').val(this.model.get('schedule').get('end_time'));
-                    $('#start-date-time').text(this.model.get('schedule').get('start_date') + ' ' + this.model.get('schedule').get('start_time'));
                     $('#end-date-time').text(this.model.get('schedule').get('end_date') + ' ' + this.model.get('schedule').get('end_time'));
-                    var repeat_string = ''
-                    _.each(this.model.get('schedule').get('repeat'), function(element) {
-                        $('#' + element + '-check').show().addClass('selected');
-                        repeat_string = repeat_string + ' ' + element;
-                    });
 
-                    if(repeat_string.length > 16) {
-                        repeat_string = repeat_string.substring(0, 16) + '...';
-                    }
-
-                    $('#repeats').text(repeat_string);
-
-                    if($.trim($('#start-date-time').text()) === '') {
-                        $('#start-date-time').text('N/A');
-                    }
                     if($.trim($('#end-date-time').text()) === '') {
                         $('#end-date-time').text('N/A');
                     }
-                    if($.trim($('#repeats').text()) === '') {
-                        $('#repeats').text('None');
-                    }   
+  
                 } else {
                     $('#schedule-switch').val('off').slider('refresh');
                     $('#schedule-block').hide();
@@ -684,6 +595,30 @@ var datalogger = function() {
             var date = new Date();
             this.log = logs.create({name: this.model.get('name'), start_date: date.toLocaleString(), template: { name: this.model.get('name'), sensors: [{ name: this.model.get('sensors').at(0).get('name'), state: this.model.get('sensors').at(0).get('state'), frequency: this.model.get('sensors').at(0).get('frequency')}, { name: this.model.get('sensors').at(1).get('name'), state: this.model.get('sensors').at(1).get('state'), frequency: this.model.get('sensors').at(1).get('frequency')} ], end_date: 'N/A' }});
             this.log.save();
+
+            if(this.model.get('sensors').at(0).get('state') === 'on') {
+                // Start Accelerometer
+            }
+
+            if(this.model.get('sensors').at(1).get('state') === 'off') {
+                // Start GPS
+                var frequency = 1000 / this.model.get('sensors').at(1).get('frequency');
+                var options = { enableHighAccuracy: true, frequency: frequency, maximumAge: frequency, timeout: frequency};
+
+                if(this.GPSWatchID) {
+                    navigator.geolocation.clearWatch(this.watchID);
+                    this.GPSWatchID = null;
+                }
+
+                var gps_success = function(position) {
+                    var date = new Date();
+                    console.log('adding gps log entry');
+                    this.log.get('entries').create({ sensor: this.model.get('sensors').at(1), timestamp: date.toLocaleString(), latitude: position.latitude, longitude: position.longitude, altitude: position.altitude  });
+                    this.log.save();
+                }
+
+                this.GPSWatchID = navigator.geolocation.watchPosition(gps_success, gps_error, options);
+            }
         },
         start_template: function(event) {
             event.preventDefault();
@@ -703,6 +638,12 @@ var datalogger = function() {
             this.log.set({ end_date: date.toLocaleString() });
             this.log.save();
             this.log = null;
+            
+            if(this.GPSWatchID) {
+                navigator.geolocation.clearWatch(this.watchID);
+                this.GPSWatchID = null;
+            }
+
             $('#template-name').textinput('enable');
             $('#schedule-switch').slider('enable');
             $('#accelerometer-switch').slider('enable');
@@ -733,16 +674,7 @@ var datalogger = function() {
                     ]);
                  
                     if($('#schedule-switch').val() === 'on') {
-                        var days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-                        var repeat = [];
-                        $('.repeat').each(function(index, element) {
-                            if($(element).find('.day-check').hasClass('selected')) {
-                                repeat.push(days[index]);
-                            }
-                        });
-
-                        template.set({schedule: {start_date: $('#start-date').val(), start_time: $('#start-time').val(),
-                            end_date: $('#end-date').val(), end_time: $('#end-time').val(), repeat: repeat}});
+                        template.set({schedule: {end_date: $('#end-date').val(), end_time: $('#end-time').val()}});
                     }
                  
                     template.save();
@@ -758,16 +690,8 @@ var datalogger = function() {
                         frequency: $('#gps-frequency').val() });
                     
                     if($('#schedule-switch').val() === 'on') {
-                        var days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-                        var repeat = [];
-                        $('.repeat').each(function(index, element) {
-                            if($(element).find('.day-check').hasClass('selected')) {
-                                repeat.push(days[index]);
-                            }
-                        });
-
-                        template.set({schedule: {start_date: $('#start-date').val(), start_time: $('#start-time').val(),
-                            end_date: $('#end-date').val(), end_time: $('#end-time').val(), repeat: repeat}});                    } else if($('#schedule-switch').val() == 'off' && template.has('schedule')) {
+                        template.set({schedule: {end_date: $('#end-date').val(), end_time: $('#end-time').val()}});                 
+                    } else if($('#schedule-switch').val() == 'off' && template.has('schedule')) {
                         template.unset('schedule');
                     }
 
@@ -913,15 +837,28 @@ var datalogger = function() {
 
     var FileItemView = Backbone.View.extend({
         tagName: 'li',
+        events: {
+            'click button': 'delete_file'
+        },
         template: $('#log-details-file-item').html(),
         render: function(eventName) {
             $(this.el).html(Mustache.to_html(this.template, this.model.toJSON()));
+            try {
+                $(this.el).find('#file-container').fieldcontain('refresh');
+                $(this.el).find('#delete-file').button('refresh');
+            } catch(e) {
+                $(this.el).find('#file-container').fieldcontain();
+                $(this.el).find('#delete-file').button();            
+            }
             return this;
+        },
+        delete_file: function(event) {
+            this.model.destroy();
+            logDetailsView.model.save();
         }
     });
 
     var scheduleView = new ScheduleView();
-    var repeatView = new RepeatView();
     templates.fetch();
     logs.fetch();
 
@@ -956,12 +893,7 @@ var datalogger = function() {
         schedule_template: function() {
             $.mobile.changePage($('#schedule-template'), { transition: 'none', reverse: false, changeHash: false });
             $('.ui-btn-active').removeClass('ui-btn-active');
-        },
-        repeat_template: function() {
-            $.mobile.changePage($('#repeat-template'), { transition: 'none', reverse: false, changeHash: false });
-            $('.ui-btn-active').removeClass('ui-btn-active');
         }
-
     });
 
     /* App initialization */

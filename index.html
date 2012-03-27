@@ -95,16 +95,8 @@
                 <a href="#schedule-template" id="scheduling"><div style="float:left;width:100%;">
                     <table style="width: 100%;">
                         <tr>
-                            <td style="text-align: left;width:50%;">Starts</td>
-                            <td id="start-date-time" style="text-align: right;width:50%;padding-right:15px;">N/A</td>
-                        </tr>
-                        <tr>
                             <td style="text-align: left;width:50%;">Ends</td>
                             <td id="end-date-time" style="text-align: right;width:50%;padding-right:15px;">N/A</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left;width:50%;">Repeats</td>
-                            <td id="repeats" style="text-align: right;text-transform:capitalize;width:50%;padding-right:15px;">None</td>
                         </tr>
                     </table>
                 </div>
@@ -212,19 +204,11 @@
 <div id="schedule-template" data-role="page">
 	<div data-role="header"  data-tap-toggle="false" data-position="fixed">
         <a href="#" id="schedule-template-back" data-icon="back">Back</a>
-		<h1>Start & End</h1>
+		<h1>End Date & Time</h1>
 	</div>
     
     <div data-role="content">
         <ul data-role="listview" data-inset="true">
-            <li class="tall-list">Start Date<br>
-                <input name="start-date" id="start-date" type="date" data-role="datebox"
-                   data-options='{"mode": "calbox"}'>
-            </li>
-            <li class="tall-list">Start Time<br>
-                <input name="start-time" id="start-time" type="date" data-role="datebox"
-                    data-options='{"mode": "timebox", "timeFormatOverride": 12}'>
-            </li>
             <li class="tall-list">End Date<br>
                 <input name="end-date" id="end-date" type="date" data-role="datebox"
                    data-options='{"mode": "calbox"}'>
@@ -233,31 +217,9 @@
                 <input name="end-time" id="end-time" type="date" data-role="datebox"
                     data-options='{"mode": "timebox", "timeFormatOverride": 12}'>
             </li>
-            <li class="tall-list"><a href="#repeat-template" id="repeat">Repeat</a></li>
         </ul>
     </div>
 </div>
-
-<!-- Repeat Screen -->
-<div id="repeat-template" data-role="page">
-	<div data-role="header"  data-tap-toggle="false" data-position="fixed">
-        <a href="#" id="repeat-template-back" data-icon="back">Back</a>
-		<h1>Repeat</h1>
-	</div>
-    
-    <div data-role="content">
-        <ul data-role="listview" id="repeat-list" data-inset="true">
-            <li class="tall-list repeat" id="repeat-mon" data-icon="false"><a href="#">Monday<div class="day-check" id="mon-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
-            <li class="tall-list repeat" id="repeat-tue" data-icon="false"><a href="#">Tuesday<div class="day-check" id="tue-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
-            <li class="tall-list repeat" id="repeat-wed" data-icon="false"><a href="#">Wednesday<div class="day-check" id="wed-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
-            <li class="tall-list repeat" id="repeat-thu" data-icon="false"><a href="#">Thursday<div class="day-check" id="thu-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
-            <li class="tall-list repeat" id="repeat-fri" data-icon="false"><a href="#">Friday<div class="day-check" id="fri-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
-            <li class="tall-list repeat" id="repeat-sat" data-icon="false"><a href="#">Saturday<div class="day-check" id="sat-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
-            <li class="tall-list repeat" id="repeat-sun" data-icon="false"><a href="#">Sunday<div class="day-check" id="sun-check" style="float:right;margin-top:10px;display:none;"><img src="assets/images/check.png"></div></a></li>
-        </ul>
-    </div>
-</div>
-
 
 <!-- Data Screen -->
 <div id="logs" data-role="page">
@@ -305,7 +267,10 @@
         <div id="sensor-title">Exported Files</div>
         <ul id="log-details-files" data-role="listview" data-inset="true">
             <script type="text/template" id="log-details-file-item">
-                <div>{{ name }}</div>
+                <div id="file-container" data-role="fieldcontain">
+                    <div>{{ name }}
+                        <div style="float: right;margin-top:-10px;"><button data-role="button" data-icon="delete" data-iconpos="notext" id="delete-file">Delete</button></div>
+                </div>
             </script>
         </ul>
         
