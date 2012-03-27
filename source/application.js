@@ -637,7 +637,7 @@ var datalogger = function() {
         gps_success: function(position) {
             var date = new Date();
             console.log('adding gps log entry');
-            this.log.get('entries').add({ sensor: this.model.get('sensors').at(1), timestamp: date.toLocaleString(), latitude: position.latitude, longitude: position.longitude, altitude: position.altitude  });
+            this.log.get('entries').add({ sensor: this.model.get('sensors').at(1), timestamp: date.toLocaleString(), latitude: position.coords.latitude, longitude: position.coords.longitude, altitude: position.coords.altitude  });
             this.log.save();
         },
         start_template: function(event) {
