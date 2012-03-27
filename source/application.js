@@ -606,7 +606,7 @@ var datalogger = function() {
                     this.accelWatchID = null;
                 }
 
-                this.accelWatchID = navigator.accelerometer.watchAcceleration(this.accel_success, this.accel_error, options);
+                this.accelWatchID = navigator.accelerometer.watchAcceleration(_.bind(this.accel_success, this), this.accel_error, options);
             }
 
             if(this.model.get('sensors').at(1).get('state') === 'on') {
@@ -619,7 +619,7 @@ var datalogger = function() {
                     this.GPSWatchID = null;
                 }
                 
-                this.GPSWatchID = navigator.geolocation.watchPosition(this.gps_success, this.gps_error, options);
+                this.GPSWatchID = navigator.geolocation.watchPosition(_.bind(this.gps_success, this), this.gps_error, options);
             }
         },
         accel_error: function() {
