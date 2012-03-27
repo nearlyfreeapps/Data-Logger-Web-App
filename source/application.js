@@ -622,19 +622,19 @@ var datalogger = function() {
                 this.GPSWatchID = navigator.geolocation.watchPosition(this.gps_success, this.gps_error, options);
             }
         },
-        accel_error = function() {
+        accel_error: function() {
             console.log('Accelerometer Error');
         },
-        accel_success = function(acceleration) {
+        accel_success: function(acceleration) {
             var date = new Date();
             console.log('adding accelerometer log entry');
             this.log.get('entries').add({ sensor: this.model.get('sensors').at(0), timestamp: date.toLocaleString(), x: acceleration.x, y: acceleration.y, z: acceleration.z  });
             this.log.save();
         },
-        gps_error = function() {
+        gps_error: function() {
             console.log('GPS Error');
         },
-        gps_success = function(position) {
+        gps_success: function(position) {
             var date = new Date();
             console.log('adding gps log entry');
             this.log.get('entries').add({ sensor: this.model.get('sensors').at(1), timestamp: date.toLocaleString(), latitude: position.latitude, longitude: position.longitude, altitude: position.altitude  });
