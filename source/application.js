@@ -600,7 +600,7 @@ var datalogger = function() {
                 // Start Accelerometer
             }
 
-            if(this.model.get('sensors').at(1).get('state') === 'off') {
+            if(this.model.get('sensors').at(1).get('state') === 'on') {
                 // Start GPS
                 var frequency = 1000 / this.model.get('sensors').at(1).get('frequency');
                 var options = { enableHighAccuracy: true, frequency: frequency, maximumAge: frequency, timeout: frequency};
