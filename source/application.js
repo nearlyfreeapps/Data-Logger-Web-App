@@ -628,7 +628,8 @@ var datalogger = function() {
         accel_success: function(acceleration) {
             var date = new Date();
             console.log('adding accelerometer log entry');
-            this.log.get('entries').add({ sensor: this.model.get('sensors').at(0), timestamp: date.toLocaleString(), x: acceleration.x, y: acceleration.y, z: acceleration.z  });
+            //this.log.get('entries').add({ sensor: this.model.get('sensors').at(0), timestamp: date.toLocaleString(), x: acceleration.x, y: acceleration.y, z: acceleration.z  });
+            this.log.get('entries').add({ timestamp: date.toLocaleString() });
             this.log.save();
         },
         gps_error: function() {
@@ -637,7 +638,8 @@ var datalogger = function() {
         gps_success: function(position) {
             var date = new Date();
             console.log('adding gps log entry');
-            this.log.get('entries').add({ sensor: this.model.get('sensors').at(1), timestamp: date.toLocaleString(), latitude: position.latitude, longitude: position.longitude, altitude: position.altitude  });
+            //this.log.get('entries').add({ sensor: this.model.get('sensors').at(1), timestamp: date.toLocaleString(), latitude: position.latitude, longitude: position.longitude, altitude: position.altitude  });
+            this.log.get('entries').add({ timestamp: date.toLocaleString() });
             this.log.save();
         },
         start_template: function(event) {
