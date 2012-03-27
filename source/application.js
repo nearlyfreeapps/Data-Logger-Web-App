@@ -609,6 +609,10 @@ var datalogger = function() {
                     navigator.geolocation.clearWatch(this.watchID);
                     this.GPSWatchID = null;
                 }
+                
+                var gps_error = function() {
+                    console.log('GPS Error');
+                }
 
                 var gps_success = function(position) {
                     var date = new Date();
