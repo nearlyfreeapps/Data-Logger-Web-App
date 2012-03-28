@@ -598,8 +598,10 @@ var datalogger = function() {
             if(this.model.has('schedule')) {
                 end_date = this.model.get('schedule').get('end_date') + ' ' + this.model.get('schedule').get('end_time');
             }
-
-            this.log = logs.create({name: this.model.get('name') + ' log ' + (this.logs.length + 1), start_date: date.toLocaleString(), template: { name: this.model.get('name'), sensors: [{ name: this.model.get('sensors').at(0).get('name'), state: this.model.get('sensors').at(0).get('state'), frequency: this.model.get('sensors').at(0).get('frequency')}, { name: this.model.get('sensors').at(1).get('name'), state: this.model.get('sensors').at(1).get('state'), frequency: this.model.get('sensors').at(1).get('frequency')} ]}, end_date: end_date });
+            
+            var log_name = this.model.get('name') + ' log ' + (logs.length + 1);
+            console.log(log_name);
+            this.log = logs.create({name: log_name, start_date: date.toLocaleString(), template: { name: this.model.get('name'), sensors: [{ name: this.model.get('sensors').at(0).get('name'), state: this.model.get('sensors').at(0).get('state'), frequency: this.model.get('sensors').at(0).get('frequency')}, { name: this.model.get('sensors').at(1).get('name'), state: this.model.get('sensors').at(1).get('state'), frequency: this.model.get('sensors').at(1).get('frequency')} ]}, end_date: end_date });
             this.log.save();
 
             if(this.model.get('sensors').at(0).get('state') === 'on') {
