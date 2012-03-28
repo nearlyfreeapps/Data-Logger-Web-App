@@ -7,7 +7,6 @@
   <feature name="http://api.phonegap.com/1.0/geolocation"/>
   <access subdomains="true" uri="http://phonedatalogger.appspot.com"/>
   <access subdomains="true" uri="http://maps.google.com"/>
-  <access subdomains="true" uri="*"/>
   <icon src="assets/images/icon.png"/>
   <content src="index.html"/>
 </widget>
