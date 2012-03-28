@@ -555,12 +555,6 @@ var datalogger = function() {
                 //Configure Existing Template View
                 $('#template-name').val(this.model.get('name'));
 
-                console.log(this.model.get('name'));
-
-                console.log(this.model.get('sensors').toJSON());
-                
-                console.log(this.model.toJSON());
-
                 $('#accelerometer-switch').val(this.model.get('sensors').at(0).get('state')).slider('refresh');
                 $('#gps-switch').val(this.model.get('sensors').at(1).get('state')).slider('refresh');
                 if(this.model.has('schedule')) {
@@ -597,8 +591,15 @@ var datalogger = function() {
             $.mobile.changePage($('#settings'), { transition: 'none', reverse: true, changeHash: true });
         },
         performLogging: function() {
+
             var date = new Date();
-            this.log = logs.create({name: this.model.get('name'), start_date: date.toLocaleString(), template: { name: this.model.get('name'), sensors: [{ name: this.model.get('sensors').at(0).get('name'), state: this.model.get('sensors').at(0).get('state'), frequency: this.model.get('sensors').at(0).get('frequency')}, { name: this.model.get('sensors').at(1).get('name'), state: this.model.get('sensors').at(1).get('state'), frequency: this.model.get('sensors').at(1).get('frequency')} ], end_date: 'N/A' }});
+            var end_date = '';
+
+            if(this.model.has('schedule')) {
+                end_date = this.model.get('schedule').get('end_date') + ' ' + this.model.get('schedule').get('end_time');
+            }
+
+            this.log = logs.create({name: this.model.get('name'), start_date: date.toLocaleString(), template: { name: this.model.get('name'), sensors: [{ name: this.model.get('sensors').at(0).get('name'), state: this.model.get('sensors').at(0).get('state'), frequency: this.model.get('sensors').at(0).get('frequency')}, { name: this.model.get('sensors').at(1).get('name'), state: this.model.get('sensors').at(1).get('state'), frequency: this.model.get('sensors').at(1).get('frequency')} ]}, end_date: end_date });
             this.log.save();
 
             if(this.model.get('sensors').at(0).get('state') === 'on') {
@@ -611,7 +612,7 @@ var datalogger = function() {
                     this.accelWatchID = null;
                 }
 
-                this.accelWatchID = navigator.accelerometer.watchAcceleration(_.bind(this.accel_success, this), this.accel_error, options);
+                this.accelWatchID = navigator.accelerometer.watchAcceleration(_.bind(this.accel_success, this), _.bind(this.accel_error, this), options);
             }
 
             if(this.model.get('sensors').at(1).get('state') === 'on') {
@@ -624,41 +625,88 @@ var datalogger = function() {
                     this.GPSWatchID = null;
                 }
                 
-                this.GPSWatchID = navigator.geolocation.watchPosition(_.bind(this.gps_success, this), this.gps_error, options);
+                this.GPSWatchID = navigator.geolocation.watchPosition(_.bind(this.gps_success, this), _.bind(this.gps_error, this), options);
             }
         },
         accel_error: function() {
+            var date = new Date();
+            if($.trim(this.log.get('end_date')) !== '') {
+                var end_date = this.parse_date(this.log.get('end_date'));
+                if(end_date.getTime() < date.getTime()) {
+                    alert('The logging session schedule has expired. Logging completed successfully.');
+                    this.stop_template();
+                }
+            }
+
             console.log('Accelerometer Error');
         },
         accel_success: function(acceleration) {
             var date = new Date();
+
+            if($.trim(this.log.get('end_date')) !== '') {
+                var end_date = this.parse_date(this.log.get('end_date'));
+                if(end_date.getTime() < date.getTime()) {
+                    alert('The logging session schedule has expired. Logging completed successfully.');
+                    this.stop_template();
+                }
+            }
+
             console.log('adding accelerometer log entry');
             this.log.get('entries').add({ sensor: this.model.get('sensors').at(0), timestamp: date.toLocaleString(), x: acceleration.x, y: acceleration.y, z: acceleration.z  });
             this.log.save();
         },
+        parse_date: function(input) {
+            var parts = input.match(/(\d+)/g);
+            // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
+            return new Date(parts[0], parts[1]-1, parts[2], parts[3], parts[4]); // months are 0-based
+        },
         gps_error: function() {
+            var date = new Date();
+
+            if($.trim(this.log.get('end_date')) !== '') {
+                var end_date = this.parse_date(this.log.get('end_date'));
+                if(end_date.getTime() < date.getTime()) {
+                    alert('The logging session schedule has expired. Logging completed successfully.');
+                    this.stop_template();
+                }
+            }
+
             console.log('GPS Error');
         },
         gps_success: function(position) {
             var date = new Date();
-            console.log('adding gps log entry');
+            
+            if($.trim(this.log.get('end_date')) !== '') {
+                var end_date = this.parse_date(this.log.get('end_date'));
+                if(end_date.getTime() < date.getTime()) {
+                    alert('The logging session schedule has expired. Logging completed successfully.');
+                    this.stop_template();
+                }
+            }
+
             this.log.get('entries').add({ sensor: this.model.get('sensors').at(1), timestamp: date.toLocaleString(), latitude: position.coords.latitude, longitude: position.coords.longitude, altitude: position.coords.altitude  });
             this.log.save();
         },
         start_template: function(event) {
             event.preventDefault();
-            this.performLogging();
-            $('#start-template').hide();
-            $('#stop-template').show();
-            $('#template-name').textinput('disable');
-            $('#schedule-switch').slider('disable');
-            $('#accelerometer-switch').slider('disable');
-            $('#gps-switch').slider('disable');
-            $('#delete-confirm').button('disable');
-            $('#add-template-back').hide();
+            if(this.model.get('sensors').at(0).get('state') === 'off' && this.model.get('sensors').at(1).get('state') === 'off') {
+                alert('Please enable a sensor prior to starting a logging session.');
+            } else {
+                this.performLogging();
+                $('#start-template').hide();
+                $('#stop-template').show();
+                $('#template-name').textinput('disable');
+                $('#schedule-switch').slider('disable');
+                $('#accelerometer-switch').slider('disable');
+                $('#gps-switch').slider('disable');
+                $('#delete-confirm').button('disable');
+                $('#add-template-back').hide();
+            }
         },
         stop_template: function(event) {
-            event.preventDefault();
+            if(event) {
+                event.preventDefault();
+            }
             var date = new Date();
             this.log.set({ end_date: date.toLocaleString() });
             this.log.save();
