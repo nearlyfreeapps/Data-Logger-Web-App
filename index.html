@@ -15,7 +15,6 @@
     <script src="assets/js/libs/backbone-min.js"></script>
     <script src="assets/js/libs/backbone-relational.js"></script>
     <script src="assets/js/libs/backbone.localStorage-min.js"></script>
-
     <script>
         $(document).bind('mobileinit', function(){      
             $.mobile.ajaxEnabled = false;
@@ -204,7 +203,7 @@
 <div id="schedule-template" data-role="page">
 	<div data-role="header"  data-tap-toggle="false" data-position="fixed">
         <a href="#" id="schedule-template-back" data-icon="back">Back</a>
-		<h1>End Date & Time</h1>
+		<h1>End Time</h1>
 	</div>
     
     <div data-role="content">
@@ -268,7 +267,7 @@
         <ul id="log-details-files" data-role="listview" data-inset="true">
             <script type="text/template" id="log-details-file-item">
                 <div id="file-container" data-role="fieldcontain">
-                    <div><div>{{ name }}<br><div style="color: #777;font-size: 12px;">{{ url }}</div><br></div>
+                    <div><div>{{ name }}<br><div style="color: #777;font-size: 12px;">{{ data_url }}</div><br></div>
                         <div>
                             <div data-mini="true" data-role="controlgroup" id="file-buttons" data-type="horizontal">
                                 <button data-mini="true" data-role="button" data-icon="forward" id="view-file">View Online</button>&nbsp;

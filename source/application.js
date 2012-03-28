@@ -34,9 +34,6 @@ var datalogger = function() {
                 key: 'sensors',
                 relatedModel: SensorModel,
                 collectionType: SensorCollection,
-                reverseRelation: {
-                    key: 'template'
-                }
             }
         ]
     });
@@ -557,6 +554,13 @@ var datalogger = function() {
             } else {
                 //Configure Existing Template View
                 $('#template-name').val(this.model.get('name'));
+
+                console.log(this.model.get('name'));
+
+                console.log(this.model.get('sensors').toJSON());
+                
+                console.log(this.model.toJSON());
+
                 $('#accelerometer-switch').val(this.model.get('sensors').at(0).get('state')).slider('refresh');
                 $('#gps-switch').val(this.model.get('sensors').at(1).get('state')).slider('refresh');
                 if(this.model.has('schedule')) {
@@ -720,7 +724,7 @@ var datalogger = function() {
                     
                     if($('#schedule-switch').val() === 'on') {
                         template.set({schedule: {end_date: $('#end-date').val(), end_time: $('#end-time').val()}});                 
-                    } else if($('#schedule-switch').val() == 'off' && template.has('schedule')) {
+                    } else if($('#schedule-switch').val() === 'off' && template.has('schedule')) {
                         template.unset('schedule');
                     }
 
@@ -850,8 +854,8 @@ var datalogger = function() {
             }
             
             var options = {
-                log: 'testing123',
-            };
+                log: 'testing123'
+            }
 
             $.post('http://phonedatalogger.appspot.com/api/', options, 
                 _.bind(success, this)).error(function() {
