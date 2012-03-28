@@ -854,7 +854,7 @@ var datalogger = function() {
             }
             
             var options = {
-                log: 'testing123'
+                log: 'testing\n123'
             }
 
             $.post('http://phonedatalogger.appspot.com/api/', options, 
