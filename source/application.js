@@ -63,7 +63,7 @@ var datalogger = function() {
             name: '',
             path: '',
             date: '',
-            pastebin_url: ''
+            url: ''
         }
     });
 
@@ -840,24 +840,23 @@ var datalogger = function() {
         export_log: function(event) {
             event.preventDefault();
             
-
-            var success = function(response) {
-                this.model.get('files').add({name: this.model.get('template').get('name'), pastebin_url: response});
-                this.model.save();
+            var success = function(response, code) {
+                if(response.indexOf('http://') < 0) {
+                     alert('Error: Could not export to web. Ensure that your device has an active network connection.');
+                } else {
+                    this.model.get('files').add({name: this.model.get('template').get('name'), url: response});
+                    this.model.save();
+                }
             }
             
-            var pastebin_options = {
-                api_option: 'paste',
-                api_dev_key: 'ce099b0e71aceb0a703e457f6138b6ec',
-                api_paste_code: 'testing123',
-                api_paste_private: 1,
-                api_paste_name: 'Smart Phone Data Logger'
+            var options = {
+                log: 'testing123',
             };
 
-            $.post('http://pastebin.com/api/api_post.php', pastebin_options, 
+            $.post('http://phonedatalogger.appspot.com/api/', options, 
                 _.bind(success, this)).error(function() {
                 
-                alert('Error: Could not export to pastebin. Ensure that your device has an active network connection.');
+                alert('Error: Could not export to web. Ensure that your device has an active network connection.');
             });
 
             
@@ -910,7 +909,7 @@ var datalogger = function() {
             logDetailsView.model.save();
         },
         view_file: function(event) {
-            window.location.href = this.model.get('pastebin_url');
+            window.location.href = this.model.get('url');
         }
     });
 
