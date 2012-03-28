@@ -268,8 +268,13 @@
         <ul id="log-details-files" data-role="listview" data-inset="true">
             <script type="text/template" id="log-details-file-item">
                 <div id="file-container" data-role="fieldcontain">
-                    <div>{{ name }}
-                        <div style="float: right;margin-top:-10px;"><button data-role="button" data-icon="delete" data-iconpos="notext" id="delete-file">Delete</button></div>
+                    <div><div>{{ name }}<br><div style="color: #777;font-size: 12px;">{{ pastebin_url }}</div></div>
+                        <div style="float: right;margin-top:-25px;">
+                            <div data-mini="true" data-role="controlgroup" id="file-buttons" data-type="horizontal">
+                                <button data-mini="true" data-role="button" data-icon="forward" id="view-file">View on Pastebin</button>&nbsp;
+                                <button date-mini="true" data-role="button" data-icon="delete" id="delete-file">Delete</button>
+                            </div>
+                        </div>
                 </div>
             </script>
         </ul>

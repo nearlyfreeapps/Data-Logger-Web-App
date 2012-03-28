@@ -62,7 +62,8 @@ var datalogger = function() {
             decimal_places: 0,
             name: '',
             path: '',
-            date: ''
+            date: '',
+            pastebin_url: ''
         }
     });
 
@@ -838,9 +839,28 @@ var datalogger = function() {
         },
         export_log: function(event) {
             event.preventDefault();
+            
 
-            this.model.get('files').add({name: this.model.get('template').get('name')});
-            this.model.save();
+            var success = function(response) {
+                this.model.get('files').add({name: this.model.get('template').get('name'), pastebin_url: response});
+                this.model.save();
+            }
+            
+            var pastebin_options = {
+                api_option: 'paste',
+                api_dev_key: 'ce099b0e71aceb0a703e457f6138b6ec',
+                api_paste_code: 'testing123',
+                api_paste_private: 1,
+                api_paste_name: 'Smart Phone Data Logger'
+            };
+
+            $.post('http://pastebin.com/api/api_post.php', pastebin_options, 
+                _.bind(success, this)).error(function() {
+                
+                alert('Error: Could not export to pastebin. Ensure that your device has an active network connection.');
+            });
+
+            
         }
     })
 
@@ -866,7 +886,8 @@ var datalogger = function() {
     var FileItemView = Backbone.View.extend({
         tagName: 'li',
         events: {
-            'click button': 'delete_file'
+            'click #delete-file': 'delete_file',
+            'click #view-file': 'view_file'
         },
         template: $('#log-details-file-item').html(),
         render: function(eventName) {
@@ -874,15 +895,22 @@ var datalogger = function() {
             try {
                 $(this.el).find('#file-container').fieldcontain('refresh');
                 $(this.el).find('#delete-file').button('refresh');
+                $(this.el).find('#view-file').button('refresh');
+                $(this.el).find('#file-buttons').controlgroup('refresh');
             } catch(e) {
                 $(this.el).find('#file-container').fieldcontain();
-                $(this.el).find('#delete-file').button();            
+                $(this.el).find('#delete-file').button();
+                $(this.el).find('#view-file').button();
+                $(this.el).find('#file-buttons').controlgroup();       
             }
             return this;
         },
         delete_file: function(event) {
             this.model.destroy();
             logDetailsView.model.save();
+        },
+        view_file: function(event) {
+            window.location.href = this.model.get('pastebin_url');
         }
     });
 
