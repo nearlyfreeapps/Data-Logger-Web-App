@@ -599,7 +599,7 @@ var datalogger = function() {
                 end_date = this.model.get('schedule').get('end_date') + ' ' + this.model.get('schedule').get('end_time');
             }
 
-            this.log = logs.create({name: this.model.get('name'), start_date: date.toLocaleString(), template: { name: this.model.get('name'), sensors: [{ name: this.model.get('sensors').at(0).get('name'), state: this.model.get('sensors').at(0).get('state'), frequency: this.model.get('sensors').at(0).get('frequency')}, { name: this.model.get('sensors').at(1).get('name'), state: this.model.get('sensors').at(1).get('state'), frequency: this.model.get('sensors').at(1).get('frequency')} ]}, end_date: end_date });
+            this.log = logs.create({name: this.model.get('name') + ' log ' + (this.logs.length + 1), start_date: date.toLocaleString(), template: { name: this.model.get('name'), sensors: [{ name: this.model.get('sensors').at(0).get('name'), state: this.model.get('sensors').at(0).get('state'), frequency: this.model.get('sensors').at(0).get('frequency')}, { name: this.model.get('sensors').at(1).get('name'), state: this.model.get('sensors').at(1).get('state'), frequency: this.model.get('sensors').at(1).get('frequency')} ]}, end_date: end_date });
             this.log.save();
 
             if(this.model.get('sensors').at(0).get('state') === 'on') {
@@ -891,7 +891,7 @@ var datalogger = function() {
         },
         export_log: function(event) {
             event.preventDefault();
-            
+            $('#exporting').show();
             var success = function(response, code) {
                 if(response.indexOf('http://') < 0) {
                      alert('Error: Could not export to web. Ensure that your device has an active network connection.');
@@ -899,6 +899,8 @@ var datalogger = function() {
                     this.model.get('files').add({name: this.model.get('template').get('name'), data_url: response});
                     this.model.save();
                 }
+
+                $('#exporting').hide();
             }
             
             var options = {
@@ -907,7 +909,7 @@ var datalogger = function() {
 
             $.post('http://phonedatalogger.appspot.com/api/', options, 
                 _.bind(success, this)).error(function() {
-                
+                $('#exporting').hide();
                 alert('Error: Could not export to web. Ensure that your device has an active network connection.');
             });
 
