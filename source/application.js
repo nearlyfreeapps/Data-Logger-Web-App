@@ -63,7 +63,7 @@ var datalogger = function() {
             name: '',
             path: '',
             date: '',
-            url: ''
+            data_url: ''
         }
     });
 
@@ -844,7 +844,7 @@ var datalogger = function() {
                 if(response.indexOf('http://') < 0) {
                      alert('Error: Could not export to web. Ensure that your device has an active network connection.');
                 } else {
-                    this.model.get('files').add({name: this.model.get('template').get('name'), url: response});
+                    this.model.get('files').add({name: this.model.get('template').get('name'), data_url: response});
                     this.model.save();
                 }
             }
@@ -909,7 +909,7 @@ var datalogger = function() {
             logDetailsView.model.save();
         },
         view_file: function(event) {
-            window.location.href = this.model.get('url');
+            window.location.href = this.model.get('data_url');
         }
     });
 
