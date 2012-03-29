@@ -8,7 +8,7 @@
   <access subdomains="true" uri="http://phonedatalogger.appspot.com"/>
   <access subdomains="true" uri="http://maps.google.com"/>
   <icon src="assets/images/icon.png"/>
-  <gap:splash src="assets/images/android-splash.png" width="480" height="800"/>
   <gap:splash src="assets/images/blackberry-splash.png" width="640" height="480"/>
+  <gap:splash src="assets/images/android-splash.png" width="480" height="800"/>
   <content src="index.html"/>
 </widget>
