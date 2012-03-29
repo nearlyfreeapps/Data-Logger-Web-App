@@ -910,31 +910,39 @@ var datalogger = function() {
         },
         export_log: function(event) {
             event.preventDefault();
-            $('#exporting').show();
+            
+            if(this.model.get('entries').length > 0) {
+                $('#exporting').show();
+                var exporter = new Exporter(['timestamp', 'latitude', 'longitude'], this.model.get('entries'));
+                csv_data = exporter.buildCSVFromModels(',');
+                console.log(csv_data);
 
-            var success = function(response, code) {
-                if(response.indexOf('http://') < 0) {
-                     alert('Error: Could not export to web. Ensure that your device has an active network connection.');
-                } else {
-                    var file_name = this.model.get('template').get('name') + '_file_' + (this.model.get('files').length + 1);
-                    this.model.get('files').add({name: file_name , data_url: response});
-                    this.model.save();
+                var success = function(response, code) {
+                    if(response.indexOf('http://') < 0) {
+                        alert('Error: Could not export to web. Ensure that your device has an active network connection.');
+                    } else {
+                        var file_name = this.model.get('template').get('name') + '_file_' + (this.model.get('files').length + 1);
+                        file_name = file_name.split(' ').join('_');
+                        this.model.get('files').add({name: file_name , data_url: response});
+                        this.model.save();
+                    }
+
+                    $('#exporting').hide();
+                }
+            
+                var options = {
+                    log: csv_data
                 }
 
-                $('#exporting').hide();
-            }
-            
-            var options = {
-                log: JSON.stringify(this.model.get('entries').toJSON(), null, 4)
-            }
+                $.post('http://phonedatalogger.appspot.com/api/', options, 
+                    _.bind(success, this)).error(function() {
+                    $('#exporting').hide();
+                    alert('Error: Could not export to web. Ensure that your device has an active network connection.');
+                });
 
-            $.post('http://phonedatalogger.appspot.com/api/', options, 
-                _.bind(success, this)).error(function() {
-                $('#exporting').hide();
-                alert('Error: Could not export to web. Ensure that your device has an active network connection.');
-            });
-
-            
+            } else {
+                alert('Cannot export file: No log entries exist.');
+            }
         }
     })
 

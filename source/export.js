@@ -14,11 +14,38 @@
     exporter.exportCSV('testCSVFileName', ',');
     exporter.exportXML('testXMLFileName');
  */
-function Exporter(columns, data) {
+function Exporter(columns, entries) {
     this.fileName = "";
     this.columnHeadings = columns;
-    this.rowData   = data;
+    this.entries = entries;
     this.fileData = "";
+}
+
+Exporter.prototype.buildCSVFromModels = function(delimiter) {
+    var delim = delimiter;
+    var csvData = '';
+    for (var i = 0; i < this.columnHeadings.length; i++) {
+        if (i == this.columnHeadings.length-1) {
+            delim = '';
+        }
+        csvData += (this.columnHeadings[i] + delim);
+    }
+
+    csvData += "\n";
+
+    _.each(this.entries, function(entry) {
+
+        delim = delimiter;
+        for (var i = 0; i < this.columnHeadings.length; i++) {
+            if (i == this.columnHeadings.length-1) {
+                delim = '';
+            }
+            csvData += (this.get(this.columnHeadings[i]) + delim + "\n");
+        }
+
+    });
+
+    return csvData;
 }
 
 Exporter.prototype.exportCSV = function(file_name, delimiter) {
