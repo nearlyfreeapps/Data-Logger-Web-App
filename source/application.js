@@ -650,12 +650,16 @@ var datalogger = function() {
                 if(end_date.getTime() < date.getTime()) {
                     alert('The logging session schedule has expired. Logging completed successfully.');
                     this.stop_template();
-                }
-            }
+                } else {
+                    this.log.get('entries').add({ sensor: this.model.get('sensors').at(0), timestamp: date.toLocaleString(), x: acceleration.x, y: acceleration.y, z: acceleration.z  });
+                    this.log.save();
 
-            console.log('adding accelerometer log entry');
-            this.log.get('entries').add({ sensor: this.model.get('sensors').at(0), timestamp: date.toLocaleString(), x: acceleration.x, y: acceleration.y, z: acceleration.z  });
-            this.log.save();
+                }
+            } else {
+                this.log.get('entries').add({ sensor: this.model.get('sensors').at(0), timestamp: date.toLocaleString(), x: acceleration.x, y: acceleration.y, z: acceleration.z  });
+                this.log.save();
+
+            }
         },
         parse_date: function(input) {
             var parts = input.match(/(\d+)/g);
@@ -683,11 +687,14 @@ var datalogger = function() {
                 if(end_date.getTime() < date.getTime()) {
                     alert('The logging session schedule has expired. Logging completed successfully.');
                     this.stop_template();
+                } else {
+                    this.log.get('entries').add({ sensor: this.model.get('sensors').at(1), timestamp: date.toLocaleString(), latitude: position.coords.latitude, longitude: position.coords.longitude, altitude: position.coords.altitude  });
+                    this.log.save();
                 }
+            } else {
+                this.log.get('entries').add({ sensor: this.model.get('sensors').at(1), timestamp: date.toLocaleString(), latitude: position.coords.latitude, longitude: position.coords.longitude, altitude: position.coords.altitude  });
+                this.log.save();
             }
-
-            this.log.get('entries').add({ sensor: this.model.get('sensors').at(1), timestamp: date.toLocaleString(), latitude: position.coords.latitude, longitude: position.coords.longitude, altitude: position.coords.altitude  });
-            this.log.save();
         },
         start_template: function(event) {
             event.preventDefault();
