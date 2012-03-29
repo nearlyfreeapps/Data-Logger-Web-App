@@ -911,11 +911,13 @@ var datalogger = function() {
         export_log: function(event) {
             event.preventDefault();
             $('#exporting').show();
+
             var success = function(response, code) {
                 if(response.indexOf('http://') < 0) {
                      alert('Error: Could not export to web. Ensure that your device has an active network connection.');
                 } else {
-                    this.model.get('files').add({name: this.model.get('template').get('name'), data_url: response});
+                    var file_name = this.model.get('template').get('name') + '_file_' + (this.model.get('files').length + 1);
+                    this.model.get('files').add({name: file_name , data_url: response});
                     this.model.save();
                 }
 
@@ -923,7 +925,7 @@ var datalogger = function() {
             }
             
             var options = {
-                log: 'testing\n123'
+                log: JSON.stringify(this.model.get('entries').toJSON(), null, 4)
             }
 
             $.post('http://phonedatalogger.appspot.com/api/', options, 
