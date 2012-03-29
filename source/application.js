@@ -480,6 +480,16 @@ var datalogger = function() {
         }
     });
 
+    var AboutView = Backbone.View.extend({
+        el: $('#about'),
+        events: {
+            'click #about-back': 'back',
+        },
+        back: function(event) {
+            $.mobile.changePage($('#settings'), { transition: 'none', reverse: true, changeHash: false });
+        }
+    });
+
     var accelerometerView = new AccelerometerView();
     var gpsView = new GPSView();
 
@@ -976,6 +986,7 @@ var datalogger = function() {
         }
     });
 
+    var aboutView = new AboutView();
     var scheduleView = new ScheduleView();
     templates.fetch();
     logs.fetch();
@@ -987,7 +998,8 @@ var datalogger = function() {
             'logs': 'logs',
             'add-template': 'add_template',
             'schedule-template': 'schedule_template',
-            'repeat-template': 'repeat_template'
+            'repeat-template': 'repeat_template',
+            'about': 'about'
         },
 
         index: function() {},
@@ -1011,7 +1023,11 @@ var datalogger = function() {
         schedule_template: function() {
             $.mobile.changePage($('#schedule-template'), { transition: 'none', reverse: false, changeHash: false });
             $('.ui-btn-active').removeClass('ui-btn-active');
-        }
+        },
+        about: function() {
+            $.mobile.changePage($('#about'), { transition: 'none', reverse: false, changeHash: false });
+            $('.ui-btn-active').removeClass('ui-btn-active');
+        },
     });
 
     /* App initialization */
