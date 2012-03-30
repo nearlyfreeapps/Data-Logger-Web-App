@@ -913,7 +913,7 @@ var datalogger = function() {
         export_log: function(event) {
             event.preventDefault();
             var log_data = '';
-            this.model.get('entries').add({sensor: { name: 'Accelerometer' }, timestamp: (new Date).toString(), x: 1.232342, y: 7.324234234, z: 9.222});
+
             if(this.model.get('entries').length > 0) {
                 $('#exporting').show();
                 var format_choice = $('input[name=format-choice-1]:checked').val();
