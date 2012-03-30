@@ -911,10 +911,20 @@ var datalogger = function() {
         export_log: function(event) {
             event.preventDefault();
             var log_data = '';
-            
+            this.model.get('entries').add({sensor: { name: 'Accelerometer' }, timestamp: (new Date).toString(), x: 1.232342, y: 7.324234234, z: 9.222});
             if(this.model.get('entries').length > 0) {
                 $('#exporting').show();
                 var format_choice = $('input[name=format-choice-1]:checked').val();
+
+                var accelerometer_entries = _.filter(this.model.get('entries').models, function(entry) {
+                    return entry.get('sensor').get('name') === "Accelerometer";
+                });
+                
+                var gps_entries = _.filter(this.model.get('entries').models, function(entry) {
+                    return entry.get('sensor').get('name') === "GPS";
+                });
+
+                var dec = $('#decimal-places').val();
 
                 if(format_choice === 'csv') {
                     
@@ -927,23 +937,7 @@ var datalogger = function() {
                     }
 
                     var delimiter = delimiters[delim_choice];
-
-                    var accelerometer_entries = _.filter(this.model.get('entries').models, function(entry) {
-                        if(entry.get('sensor').get('name') === "Accelerometer") {
-                            return true;
-                        }
-                        return false;
-                    });
-                
-                    var gps_entries = _.filter(this.model.get('entries').models, function(entry) {
-                        if(entry.get('sensor').get('name') === "GPS") {
-                            return true;
-                        }
-                        return false;
-                    });
-
-                    var dec = $('#decimal-places').val();
-
+            
                     if(accelerometer_entries.length > 0) {
                         var exporter = new Exporter(['timestamp', 'x', 'y', 'z'], accelerometer_entries);
                         log_data = exporter.buildCSVFromModels(delimiter, dec);
@@ -951,11 +945,20 @@ var datalogger = function() {
 
                     if(gps_entries.length > 0) {
                         var exporter = new Exporter(['timestamp', 'latitude', 'longitude', 'altitude'], gps_entries);
-                        log_data = exporter.buildCSVFromModels(delimiter, dec);
+                        log_data += exporter.buildCSVFromModels(delimiter, dec);
                     }
             
                 } else {
                     //Must be XML
+                     if(accelerometer_entries.length > 0) {
+                        var exporter = new Exporter(['timestamp', 'x', 'y', 'z'], accelerometer_entries);
+                        log_data = exporter.buildXMLFromModels('accelerometer', dec);
+                    }
+
+                    if(gps_entries.length > 0) {
+                        var exporter = new Exporter(['timestamp', 'latitude', 'longitude', 'altitude'], gps_entries);
+                        log_data += exporter.buildXMLFromModels('gps', dec);
+                    }
                 }
 
                 var options = {
@@ -967,7 +970,7 @@ var datalogger = function() {
                         alert('Error: Could not export to web. Ensure that your device has an active network connection.');
                     } else {
                         var file_name = this.model.get('template').get('name') + '_file_' + (this.model.get('files').length + 1);
-                        file_name = file_name.split(' ').join('_');
+                        file_name = file_name.split(' ').join('_') + '.' + format_choice;
                         this.model.get('files').add({name: file_name , data_url: response});
                         this.model.save();
                     }
