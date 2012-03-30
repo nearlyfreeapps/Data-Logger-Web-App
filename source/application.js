@@ -498,6 +498,7 @@ var datalogger = function() {
         initialize: function() {
             this.model = null;
             this.log = null;
+            this.logging = false;
         },
         events: {
             'click #save-template': 'save_template',
@@ -516,7 +517,7 @@ var datalogger = function() {
         accelerometer_template: function(event) {
             event.preventDefault();
 
-            if ($('#accelerometer-switch').val() === "on") {
+            if ($('#accelerometer-switch').val() === "on" && !this.logging) {
                 $.mobile.changePage($('#accelerometer-template'), { transition: 'none', reverse: false, changeHash: false });
                 $('.ui-btn-active').removeClass('ui-btn-active');
 
@@ -531,7 +532,7 @@ var datalogger = function() {
         gps_template: function(event) {
             event.preventDefault();
 
-            if ($('#gps-switch').val() === "on") {
+            if ($('#gps-switch').val() === "on" && !this.logging) {
                 $.mobile.changePage($('#gps-template'), { transition: 'none', reverse: false, changeHash: false })
                 $('.ui-btn-active').removeClass('ui-btn-active');
                 
@@ -601,7 +602,8 @@ var datalogger = function() {
             $.mobile.changePage($('#settings'), { transition: 'none', reverse: true, changeHash: true });
         },
         performLogging: function() {
-
+            $('#logging_loader').show();
+            this.logging = true;
             var date = new Date();
             var end_date = '';
 
@@ -610,7 +612,6 @@ var datalogger = function() {
             }
             
             var log_name = this.model.get('name') + ' log ' + (logs.length + 1);
-            console.log(log_name);
             this.log = logs.create({name: log_name, start_date: date.toLocaleString(), template: { name: this.model.get('name'), sensors: [{ name: this.model.get('sensors').at(0).get('name'), state: this.model.get('sensors').at(0).get('state'), frequency: this.model.get('sensors').at(0).get('frequency')}, { name: this.model.get('sensors').at(1).get('name'), state: this.model.get('sensors').at(1).get('state'), frequency: this.model.get('sensors').at(1).get('frequency')} ]}, end_date: end_date });
             this.log.save();
 
@@ -726,11 +727,12 @@ var datalogger = function() {
             if(event) {
                 event.preventDefault();
             }
+            
+            $('#logging_loader').hide();
+            this.logging = false;
             var date = new Date();
             this.log.set({ end_date: date.toLocaleString() });
             this.log.save();
-
-            console.log(this.log.toJSON());
 
             this.log = null;
             
