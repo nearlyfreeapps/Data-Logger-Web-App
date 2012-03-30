@@ -881,9 +881,9 @@ var datalogger = function() {
             this.model = model;
             $('#delete-log-confirm-block').hide();
             $('#log-details-files').empty();
-            $("input[type='radio']").removeAttr('checked').checkboxradio("refresh");
-            $('#format-choice-1').attr('checked', 'checked').checkboxradio('refresh');
-	        $('#delim-choice-1').attr('checked', 'checked').checkboxradio('refresh');
+            $("input[type='radio']").attr('checked', false).checkboxradio("refresh");
+            $('#choice-1').attr('checked', true).checkboxradio('refresh');
+	        $('#delim-choice-1').attr('checked', true).checkboxradio('refresh');
 
             this.logFileView = new FileListView({ model: this.model.get('files')});
             this.logFileView.render();
@@ -910,12 +910,57 @@ var datalogger = function() {
         },
         export_log: function(event) {
             event.preventDefault();
+            var log_data = '';
             
             if(this.model.get('entries').length > 0) {
                 $('#exporting').show();
-                var exporter = new Exporter(['timestamp', 'latitude', 'longitude'], this.model.get('entries'));
-                csv_data = exporter.buildCSVFromModels(',');
-                console.log(csv_data);
+                var format_choice = $('input[name=format-choice-1]:checked').val();
+
+                if(format_choice === 'csv') {
+                    
+                    var delim_choice = $('input[name=delim-choice-2]:checked').val();
+
+                    var delimiters = {
+                        'comma': ",",
+                        'space': " ",
+                        'tab': "\t"
+                    }
+
+                    var delimiter = delimiters[delim_choice];
+
+                    var accelerometer_entries = _.filter(this.model.get('entries').models, function(entry) {
+                        if(entry.get('sensor').get('name') === "Accelerometer") {
+                            return true;
+                        }
+                        return false;
+                    });
+                
+                    var gps_entries = _.filter(this.model.get('entries').models, function(entry) {
+                        if(entry.get('sensor').get('name') === "GPS") {
+                            return true;
+                        }
+                        return false;
+                    });
+
+                    var dec = $('#decimal-places').val();
+
+                    if(accelerometer_entries.length > 0) {
+                        var exporter = new Exporter(['timestamp', 'x', 'y', 'z'], accelerometer_entries);
+                        log_data = exporter.buildCSVFromModels(delimiter, dec);
+                    }
+
+                    if(gps_entries.length > 0) {
+                        var exporter = new Exporter(['timestamp', 'latitude', 'longitude', 'altitude'], gps_entries);
+                        log_data = exporter.buildCSVFromModels(delimiter, dec);
+                    }
+            
+                } else {
+                    //Must be XML
+                }
+
+                var options = {
+                    log: log_data
+                }
 
                 var success = function(response, code) {
                     if(response.indexOf('http://') < 0) {
@@ -928,11 +973,7 @@ var datalogger = function() {
                     }
 
                     $('#exporting').hide();
-                }
-            
-                var options = {
-                    log: csv_data
-                }
+               }
 
                 $.post('http://phonedatalogger.appspot.com/api/', options, 
                     _.bind(success, this)).error(function() {

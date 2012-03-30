@@ -23,7 +23,7 @@
             $.mobile.pushStateEnabled = false;
         });
     </script>
-	<script src="assets/js/libs/jquery.mobile-1.1.0.min.js"></script>
+	<script src="assets/js/libs/jquery.mobile.js"></script>
     <script src="assets/js/libs/jquery.mobile.datebox-1.0.1.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
     <script src="assets/js/libs/jquery.flot.js"></script>
@@ -317,11 +317,11 @@
         <ul id="log-details-export" data-role="listview" data-inset="true">
             <li>File Format<br>
             <div data-role="fieldcontain">
-                <fieldset data-role="controlgroup" data-mini="true" data-type="horizontal">
-                    <input data-mini="true" type="radio" name="format-choice-1" id="format-choice-1" value="csv" checked="checked" />
-                    <label for="format-choice-1">CSV</label>
-                    <input data-mini="true" type="radio" name="format-choice-1" id="format-choice-2" value="xml"  />
-         	        <label for="format-choice-2">XML</label>
+                <fieldset data-role="controlgroup" data-mini="true">
+                    <input data-mini="true" type="radio" name="format-choice-1" id="choice-1" value="csv" />
+                    <label for="choice-1">CSV</label>
+                    <input data-mini="true" type="radio" name="format-choice-1" id="choice-2" value="xml"  />
+         	        <label for="choice-2">XML</label>
                 </fieldset>
             </div>
             </li>

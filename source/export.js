@@ -21,9 +21,16 @@ function Exporter(columns, entries) {
     this.fileData = "";
 }
 
-Exporter.prototype.buildCSVFromModels = function(delimiter) {
+Exporter.prototype.buildCSVFromModels = function(delimiter, decimal_places) {
     var delim = delimiter;
     var csvData = '';
+
+    function round(num, dec) {
+	    var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+	    return result;
+    }
+    
+
     for (var i = 0; i < this.columnHeadings.length; i++) {
         if (i == this.columnHeadings.length-1) {
             delim = '';
@@ -33,17 +40,27 @@ Exporter.prototype.buildCSVFromModels = function(delimiter) {
 
     csvData += "\n";
 
-    _.each(this.entries, function(entry) {
-
+    _.each(this.entries.models, _.bind(function(entry) {
         delim = delimiter;
         for (var i = 0; i < this.columnHeadings.length; i++) {
             if (i == this.columnHeadings.length-1) {
                 delim = '';
             }
-            csvData += (this.get(this.columnHeadings[i]) + delim + "\n");
+            if(isNaN(entry.get(this.columnHeadings[i]))) {
+                csvData += (entry.get(this.columnHeadings[i]) + delim);
+            } else {
+                if(entry.get(this.columnHeadings[i]) !== null) {
+                    csvData += (round(entry.get(this.columnHeadings[i]), decimal_places) + delim);
+                } else {
+                    csvData += (round(0, decimal_places) + delim);
+                }
+            }
         }
 
-    });
+        csvData += "\n";
+    }, this));
+
+    csvData += "\n";
 
     return csvData;
 }
